@@ -330,6 +330,11 @@ footer.site-foot{margin-top:88px;border-top:1px solid var(--line);padding-block:
 .field input,.field select,.field textarea{width:100%;font:inherit;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
 .notice{background:color-mix(in oklab,var(--p) 25%,var(--surface));border:1px solid var(--line);border-radius:14px;padding:14px 18px;font-size:14px;margin-bottom:24px}
 
+/* test-mode note */
+.testnote{background:color-mix(in oklab,var(--p) 14%,var(--surface));border:1px dashed color-mix(in oklab,var(--p) 60%,var(--line));border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45;color:var(--ink)}
+.testnote b{display:block;margin-bottom:2px}
+.testnote .tnum{font-family:var(--mono);font-weight:600;white-space:nowrap}
+
 /* toast */
 .toast{position:fixed;left:50%;top:84px;transform:translate(-50%,-12px);opacity:0;visibility:hidden;background:var(--ink);color:#fff;padding:12px 18px;border-radius:999px;font-weight:600;z-index:100;transition:transform .35s,opacity .35s,visibility .35s;max-width:calc(100% - 32px);box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
 .toast.on{transform:translate(-50%,0);opacity:1;visibility:visible}

@@ -6,6 +6,7 @@
   <div class="dr-foot">
     <div class="sum"><span>Subtotal</span><span id="drSub" class="tnum">{{ cart.total_price | money }}</span></div>
     <small>Taxes and shipping calculated at checkout.</small>
+    <div class="testnote"><b>Test mode, no real charges.</b> At checkout pay with card <span class="tnum">4242 4242 4242 4242</span>, any future expiry date, any 3-digit CVC and any name.</div>
     <button class="btn btn-ink" id="toCheckout" type="button"{% if cart.item_count == 0 %} disabled{% endif %}>Check out</button>
     <a href="{{ routes.cart_url }}" style="text-align:center;font-size:14px;color:var(--muted)">View full cart</a>
   </div>
