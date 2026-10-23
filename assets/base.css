@@ -483,3 +483,6 @@ footer.site-foot{margin-top:88px;border-top:1px solid var(--line);padding-block:
 .spin-btns button{border:0;background:transparent;font:inherit;font-weight:700;font-size:13px;padding:7px 14px;border-radius:999px;color:var(--muted);cursor:pointer}
 .spin-btns button[aria-pressed=true]{background:var(--ink);color:#fff}
 @media (max-width:520px){.spin-hint{font-size:11px}.spin-ui{padding:0 12px;bottom:12px}}
+.spin-card{transform:rotateX(calc(var(--rx,0) * 1deg)) rotateY(calc(var(--ry,0) * 1deg))}
+.spin-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.spin.is-3d .spin-card{visibility:hidden}

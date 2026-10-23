@@ -259,40 +259,44 @@
 
   if (drawer) fetchCart().catch(function () {});
 
-  /* ---------- 360 pouch viewer: drag, flick, keys, front/back buttons ---------- */
+  /* ---------- 360 pouch viewer: drag, flick, tilt, keys, front/back buttons ----------
+     Drives a CSS card by default; assets/spin3d.js swaps in a real 3D pouch and listens via el.__spin3d. */
   document.querySelectorAll('[data-spin]').forEach(function (el) {
     var card = el.querySelector('[data-spin-card]');
     var media = el.parentElement;
     var hint = media.querySelector('.spin-hint');
     var btns = media.querySelectorAll('[data-spin-to]');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var angle = 0, vel = 0, raf = 0, drag = null, touched = false;
+    var angle = 0, tilt = 0, vel = 0, raf = 0, drag = null, touched = false;
 
     function render() {
       card.style.setProperty('--ry', angle.toFixed(2));
+      card.style.setProperty('--rx', tilt.toFixed(2));
       var c = Math.abs(Math.cos(angle * Math.PI / 180));
-      el.style.setProperty('--sw', (0.35 + 0.65 * c).toFixed(3));
+      el.style.setProperty('--sw', (0.55 + 0.45 * c).toFixed(3));
       var back = Math.cos(angle * Math.PI / 180) < 0;
       btns.forEach(function (b) { b.setAttribute('aria-pressed', String((b.dataset.spinTo === '180') === back)); });
+      if (el.__spin3d) el.__spin3d(angle, tilt);
     }
+    el.__spinRender = render;
     function stop() { cancelAnimationFrame(raf); raf = 0; }
     function nearest(a) { return Math.round(a / 180) * 180; }
     function tween(to, ms, done) {
       stop();
-      var from = angle, t0 = performance.now();
+      var from = angle, tilt0 = tilt, t0 = performance.now();
       if (reduce) ms = 1;
       (function step(now) {
         var t = Math.min(1, (now - t0) / ms), e = 1 - Math.pow(1 - t, 3);
-        angle = from + (to - from) * e; render();
+        angle = from + (to - from) * e; tilt = tilt0 * (1 - e); render();
         if (t < 1) raf = requestAnimationFrame(step); else { raf = 0; if (done) done(); }
       })(t0);
     }
     function coast() {
       stop();
       (function step() {
-        angle += vel; vel *= 0.94; render();
+        angle += vel; vel *= 0.94; tilt *= 0.9; render();
         if (Math.abs(vel) > 0.25) raf = requestAnimationFrame(step);
-        else tween(nearest(angle), 450);
+        else tween(nearest(angle), 500);
       })();
     }
     function firstTouch() { if (!touched) { touched = true; if (hint) hint.classList.add('gone'); } }
@@ -300,7 +304,7 @@
     el.addEventListener('pointerdown', function (e) {
       if (e.button !== undefined && e.button !== 0) return;
       stop(); firstTouch();
-      drag = { x: e.clientX, a: angle, lx: e.clientX, lt: performance.now() };
+      drag = { x: e.clientX, y: e.clientY, a: angle, lx: e.clientX, lt: performance.now() };
       vel = 0; el.classList.add('dragging');
       el.setPointerCapture && el.setPointerCapture(e.pointerId);
     });
@@ -308,20 +312,21 @@
       if (!drag) return;
       var now = performance.now(), dx = e.clientX - drag.lx, dt = Math.max(1, now - drag.lt);
       angle = drag.a + (e.clientX - drag.x) * 0.55;
+      if (e.pointerType === 'mouse') tilt = Math.max(-22, Math.min(22, -(e.clientY - drag.y) * 0.25));
       vel = (dx * 0.55) / dt * 16;
       drag.lx = e.clientX; drag.lt = now; render();
     });
     function end() {
       if (!drag) return;
       drag = null; el.classList.remove('dragging');
-      if (Math.abs(vel) > 1.5) coast(); else tween(nearest(angle), 450);
+      if (Math.abs(vel) > 1.5) coast(); else tween(nearest(angle), 500);
     }
     el.addEventListener('pointerup', end);
     el.addEventListener('pointercancel', end);
     el.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
         e.preventDefault(); firstTouch();
-        tween(nearest(angle) + (e.key === 'ArrowRight' ? 180 : -180), 600);
+        tween(nearest(angle) + (e.key === 'ArrowRight' ? 180 : -180), 700);
       }
     });
     btns.forEach(function (b) {
@@ -329,7 +334,7 @@
         firstTouch();
         var want = Number(b.dataset.spinTo), base = nearest(angle);
         var isBack = Math.cos(angle * Math.PI / 180) < 0;
-        if ((want === 180) !== isBack) tween(base + 180, 650);
+        if ((want === 180) !== isBack) tween(base + 180, 750);
       });
     });
     render();
@@ -339,7 +344,7 @@
       var io = new IntersectionObserver(function (entries) {
         if (entries[0].isIntersecting) {
           io.disconnect();
-          setTimeout(function () { if (!touched) tween(360, 2200, function () { angle = 0; render(); }); }, 700);
+          setTimeout(function () { if (!touched) tween(360, 2600, function () { angle = 0; render(); }); }, 1200);
         }
       }, { threshold: 0.5 });
       io.observe(el);
