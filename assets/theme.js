@@ -350,4 +350,32 @@
       io.observe(el);
     }
   });
+
+  /* ---------- label zoom: opens a sharp, flat photo of the side you're looking at ---------- */
+  document.querySelectorAll('.spin-zoom').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var media = btn.closest('.pdp-media');
+      var backOn = media.querySelector('[data-spin-to="180"]').getAttribute('aria-pressed') === 'true';
+      var dlg = document.getElementById('zoom-dlg');
+      if (!dlg) {
+        dlg = document.createElement('dialog'); dlg.id = 'zoom-dlg'; dlg.className = 'zoom-dlg';
+        dlg.innerHTML = '<div class="zoom-bar"><span><span data-zt></span> <small>Tap the image to zoom</small></span><button type="button" aria-label="Close">×</button></div><div class="zoom-scroll"><img alt=""></div>';
+        document.body.appendChild(dlg);
+        dlg.querySelector('button').addEventListener('click', function () { dlg.close(); });
+        dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+        var sc = dlg.querySelector('.zoom-scroll');
+        sc.addEventListener('click', function (e) {
+          var r = sc.getBoundingClientRect(), fx = (e.clientX - r.left + sc.scrollLeft) / sc.scrollWidth, fy = (e.clientY - r.top + sc.scrollTop) / sc.scrollHeight;
+          sc.classList.toggle('big');
+          sc.scrollLeft = fx * sc.scrollWidth - r.width / 2; sc.scrollTop = fy * sc.scrollHeight - r.height / 2;
+        });
+      }
+      var img = dlg.querySelector('img');
+      img.src = backOn ? btn.dataset.zoomBack : btn.dataset.zoomFront;
+      img.alt = (backOn ? 'Back' : 'Front') + ' of the label';
+      dlg.querySelector('[data-zt]').textContent = backOn ? 'Back of the label' : 'Front';
+      dlg.querySelector('.zoom-scroll').classList.remove('big');
+      if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+    });
+  });
 })();

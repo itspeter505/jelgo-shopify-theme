@@ -37,23 +37,46 @@
   <div class="pdp">
     <div class="pdp-media{% if product.tags contains 'bundle' and product.featured_image %} full{% endif %}">
       {%- unless product.tags contains 'bundle' -%}<span class="ring" aria-hidden="true"></span>{%- endunless -%}
-      {%- if product.tags contains 'spin' -%}
-        {%- assign spin_front = 'spin-' | append: product.handle | append: '-front.webp' -%}
-        {%- assign spin_back = 'spin-' | append: product.handle | append: '-back.webp' -%}
-        {%- assign p3 = '3d-' | append: product.handle -%}
-        <div class="spin" data-spin tabindex="0"
-          data-3d-front="{{ p3 | append: '-front.webp' | asset_url }}" data-3d-back="{{ p3 | append: '-back.webp' | asset_url }}"
+      {%- if product.tags contains 'spin' or product.tags contains 'spin-box' -%}
+        {%- liquid
+          assign p3 = '3d-' | append: product.handle
+          if product.tags contains 'spin-box'
+            assign kind = 'box'
+            assign f_url = p3 | append: '-front.jpg' | asset_url
+            assign b_url = p3 | append: '-back.jpg' | asset_url
+            assign w = 1600
+            assign h = 1000
+            assign noun = 'box'
+          else
+            assign kind = 'pouch'
+            assign f_url = p3 | append: '-front.webp' | asset_url
+            assign b_url = p3 | append: '-back.webp' | asset_url
+            assign w = 1066
+            assign h = 1547
+            assign noun = 'pouch'
+          endif
+          assign zf = 'label-' | append: product.handle | append: '-front.jpg' | asset_url
+          assign zb = 'label-' | append: product.handle | append: '-back.jpg' | asset_url
+        -%}
+        <div class="spin spin-{{ kind }}" data-spin tabindex="0" data-3d-type="{{ kind }}"
+          data-3d-front="{{ f_url }}" data-3d-back="{{ b_url }}"
+          {%- if kind == 'pouch' %}
           data-3d-front-height="{{ p3 | append: '-front-height.png' | asset_url }}" data-3d-back-height="{{ p3 | append: '-back-height.png' | asset_url }}"
-          data-3d-front-normal="{{ p3 | append: '-front-normal.webp' | asset_url }}" data-3d-back-normal="{{ p3 | append: '-back-normal.webp' | asset_url }}" role="img" aria-label="{{ product.title | escape }} pouch. Drag or use the arrow keys to turn it around and see the back.">
+          data-3d-front-normal="{{ p3 | append: '-front-normal.webp' | asset_url }}" data-3d-back-normal="{{ p3 | append: '-back-normal.webp' | asset_url }}"
+          {%- else %} data-3d-side="{{ p3 | append: '-side.jpg' | asset_url }}" data-3d-color="#F1E2D1"{% endif %}
+          role="img" aria-label="{{ product.title | escape }} {{ noun }}. Drag or use the arrow keys to turn it around and see the back.">
           <span class="spin-shadow" aria-hidden="true"></span>
           <div class="spin-card" data-spin-card>
-            <img class="spin-face spin-front" src="{{ spin_front | asset_url }}" alt="" width="800" height="1160" draggable="false" fetchpriority="high">
-            <img class="spin-face spin-back" src="{{ spin_back | asset_url }}" alt="" width="800" height="1160" draggable="false" loading="lazy">
+            <img class="spin-face spin-front" src="{{ f_url }}" alt="" width="{{ w }}" height="{{ h }}" draggable="false" fetchpriority="high">
+            <img class="spin-face spin-back" src="{{ b_url }}" alt="" width="{{ w }}" height="{{ h }}" draggable="false" loading="lazy">
           </div>
         </div>
         <div class="spin-ui">
           <span class="spin-hint"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14.5-4.6M20 12a8 8 0 0 1-14.5 4.6M18.5 3v4.4h-4.4M5.5 21v-4.4h4.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Drag to spin 360°</span>
-          <span class="spin-btns"><button type="button" data-spin-to="0" aria-pressed="true">Front</button><button type="button" data-spin-to="180" aria-pressed="false">Back</button></span>
+          <span class="spin-btns">
+            <button type="button" data-spin-to="0" aria-pressed="true">Front</button><button type="button" data-spin-to="180" aria-pressed="false">Back</button>
+            <button type="button" class="spin-zoom" data-zoom-front="{{ zf }}" data-zoom-back="{{ zb }}" aria-label="Zoom in to read the label"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21M10.5 7.5v6M7.5 10.5h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          </span>
         </div>
         <script src="{{ 'spin3d.js' | asset_url }}" defer></script>
       {%- else -%}
