@@ -98,22 +98,32 @@
     go(0);
   });
 
-  /* ---------- squeeze scrolly ---------- */
+  /* ---------- how it works: scroll-driven scene ---------- */
   var sq = $('[data-squeeze]');
   if (sq) {
-    var steps = $$('.step', sq), holder = $('.pouch-holder', sq), timerEl = $('.timer', sq), ticking = false;
+    var steps = $$('.step', sq), stick = $('.squeeze-stick', sq), ticking = false;
+    var label = $('[data-scene-label]', sq), timerEl = $('[data-scene-timer]', sq), bar = $('[data-scene-bar]', sq);
+    var names = ['Twist', 'Squeeze', 'Go'];
     var tick = function () {
-      var mid = window.innerHeight * 0.5, active = 0;
+      ticking = false;
+      if (!steps.length || !stick) return;
+      var mid = window.innerHeight * 0.55, active = 0;
       steps.forEach(function (s, i) { if (s.getBoundingClientRect().top < mid) active = i; });
       steps.forEach(function (s, i) { s.classList.toggle('active', i === active); });
-      var col = steps[0].parentElement.getBoundingClientRect();
-      var prog = Math.min(1, Math.max(0, (mid - col.top) / col.height));
-      var p = Math.min(prog * 1.25, 1);
-      if (holder) holder.style.transform = 'scale(' + (1 + p * 0.06).toFixed(3) + ',' + (1 - p * 0.38).toFixed(3) + ')';
-      if (timerEl) timerEl.textContent = (Math.min(prog * 1.15, 1) * 10).toFixed(1) + ' s';
-      ticking = false;
+      var state = Math.min(active, 2) + 1, secs = 0, squeeze = 1;
+      if (state === 2 && steps[1]) {
+        var r = steps[1].getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, (mid - r.top) / Math.max(1, r.height)));
+        secs = p * 10; squeeze = 1 - 0.5 * p;
+      } else if (state === 3) { secs = 10; squeeze = 0.5; }
+      stick.setAttribute('data-state', String(state));
+      stick.style.setProperty('--sq', squeeze.toFixed(3));
+      if (label) label.textContent = 'Step ' + state + ' · ' + (names[state - 1] || '');
+      if (timerEl) timerEl.textContent = state === 3 ? 'Done in 10 s' : secs.toFixed(1) + ' s';
+      if (bar) bar.style.width = (secs * 10).toFixed(1) + '%';
     };
     window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(tick); } }, { passive: true });
+    window.addEventListener('resize', tick);
     tick();
   }
 
