@@ -21,6 +21,13 @@
   if product.has_only_default_variant
     assign single = true
   endif
+  assign lede = ''
+  assign rest = product.description
+  if product.description contains 'jg-lede'
+    assign first_p = product.description | split: '</p>' | first
+    assign lede = first_p | strip_html | strip
+    assign rest = product.description | remove_first: first_p | remove_first: '</p>'
+  endif
   assign has_plans = false
   if product.selling_plan_groups.size > 0
     assign has_plans = true
@@ -36,6 +43,7 @@
       <div class="crumbs"><a href="{{ routes.all_products_collection_url }}">Shop</a><span>/</span><span>{{ product.title | escape }}</span></div>
       {%- if goal != blank -%}<p class="eyebrow">{{ goal | escape }}</p>{%- endif -%}
       <h1>{{ product.title | escape }}</h1>
+      {%- if lede != blank -%}<p class="pdp-lede">{{ lede }}</p>{%- endif -%}
       <div class="pills">
         {%- if pf != blank -%}<span class="pill">{{ pf | escape }}</span>{%- endif -%}
         {%- for pl in pill_list -%}{%- if pl != blank -%}<span class="pill">{{ pl | escape }}</span>{%- endif -%}{%- endfor -%}
@@ -110,7 +118,6 @@
       {%- endform -%}
 
       <div class="acc">
-        <details open><summary>Details</summary><div class="body rte">{{ product.description }}</div></details>
         {%- if has_plans -%}
           <details><summary>How the subscription works</summary><div class="body">{{ section.settings.sub_details | escape }}</div></details>
         {%- endif -%}
@@ -118,6 +125,12 @@
       </div>
     </div>
   </div>
+
+  {%- if rest != blank -%}
+    <section class="pdp-more">
+      <div class="rte jg">{{ rest }}</div>
+    </section>
+  {%- endif -%}
 
   <section class="band" style="padding-block:56px 0">
     <div class="sec-head"><h2 style="font-size:28px">{{ section.settings.pairs_heading | escape }}</h2></div>
