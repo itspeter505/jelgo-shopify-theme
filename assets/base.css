@@ -133,26 +133,27 @@ header.top.scrolled{border-bottom-color:var(--line)}
 .scene-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .scene-step{font-family:var(--display);font-weight:700;font-size:18px}
 .squeeze-stick .timer{position:static;font-size:15px;font-weight:600}
-.scene{height:100%;width:auto;max-width:100%;min-height:0;justify-self:center;overflow:visible}
-.scene-bar{height:8px;border-radius:999px;background:rgba(21,23,42,.1);overflow:hidden}
-.scene-bar i{display:block;height:100%;width:0;background:var(--ink);border-radius:inherit;transition:width .2s linear}
-.scene .sc-body{transform-box:view-box;transform-origin:130px 286px;transform:scale(calc(1 + (1 - var(--sq,1)) * .22),var(--sq,1));transition:transform .25s ease-out}
-.scene .sc-cap{transform-box:view-box;transform-origin:130px 26px;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
-.scene .sc-twist,.scene .sc-drops,.scene .sc-done{opacity:0;transition:opacity .4s}
-.scene .sc-done{transform-box:fill-box;transform-origin:center;transform:scale(.4);transition:opacity .4s,transform .5s cubic-bezier(.2,1.6,.4,1)}
-.squeeze-stick[data-state="1"] .sc-cap{animation:capTwist 1.6s ease-in-out infinite}
-.squeeze-stick[data-state="1"] .sc-twist{opacity:1}
-.squeeze-stick[data-state="2"] .sc-cap{transform:translate(82px,232px) rotate(80deg)}
-.squeeze-stick[data-state="3"] .sc-cap{transform:translateY(119px)}
-.squeeze-stick[data-state="2"] .sc-drops{opacity:1}
-.squeeze-stick[data-state="2"] .sc-drops circle{animation:drip 1s ease-out infinite}
-.squeeze-stick[data-state="2"] .sc-drops circle:nth-child(2){animation-delay:.3s}
-.squeeze-stick[data-state="2"] .sc-drops circle:nth-child(3){animation-delay:.6s}
-.squeeze-stick[data-state="3"] .sc-done{opacity:1;transform:scale(1)}
-@keyframes capTwist{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-12px) rotate(-28deg)}}
-@keyframes drip{0%{transform:translateY(14px);opacity:0}30%{opacity:1}100%{transform:translateY(-18px);opacity:0}}
-.scene .sc-drops circle{transform-box:fill-box}
-.scene .sc-drops{transform:translateY(calc((1 - var(--sq,1)) * 246px));transition:transform .25s ease-out,opacity .4s}
+.scene-photo{position:relative;height:100%;aspect-ratio:2/3;max-width:100%;min-height:0;justify-self:center;align-self:center}
+.sp-body,.sp-cap{position:absolute;left:0;width:100%;display:block}
+.sp-body{top:14.01%;height:85.99%;transform-origin:50% 100%;transform:scale(calc(1 + (1 - var(--sq,1)) * .25),var(--sq,1));transition:transform .25s ease-out;filter:drop-shadow(0 18px 22px rgba(20,22,40,.22))}
+.sp-cap{top:0;height:14.01%;transform-origin:50% 55%;transition:transform .6s cubic-bezier(.2,.8,.2,1);z-index:2}
+.sp-drops{position:absolute;left:50%;top:calc(11% + (1 - var(--sq,1)) * 86%);width:0;height:0;opacity:0;transition:opacity .3s,top .25s ease-out;z-index:3}
+.sp-drops i{position:absolute;left:-7px;top:0;width:14px;height:14px;border-radius:50%;background:var(--p);box-shadow:inset -3px -3px 0 rgba(0,0,0,.12)}
+.sp-drops i:nth-child(2){left:-20px;width:10px;height:10px}
+.sp-drops i:nth-child(3){left:8px;width:9px;height:9px}
+.sp-twist{position:absolute;left:30%;top:-7%;width:40%;color:var(--ink);opacity:0;transition:opacity .4s;z-index:3}
+.sp-done{position:absolute;right:-6%;top:6%;width:22%;opacity:0;transform:scale(.4);transition:opacity .4s,transform .5s cubic-bezier(.2,1.6,.4,1);z-index:3}
+.squeeze-stick[data-state="1"] .sp-cap{animation:capTwist 1.6s ease-in-out infinite}
+.squeeze-stick[data-state="1"] .sp-twist{opacity:1}
+.squeeze-stick[data-state="2"] .sp-cap{transform:translate(40%,560%) rotate(80deg)}
+.squeeze-stick[data-state="3"] .sp-cap{transform:translateY(calc((1 - var(--sq,1)) * 614%))}
+.squeeze-stick[data-state="2"] .sp-drops{opacity:1}
+.squeeze-stick[data-state="2"] .sp-drops i{animation:drip 1s ease-out infinite}
+.squeeze-stick[data-state="2"] .sp-drops i:nth-child(2){animation-delay:.3s}
+.squeeze-stick[data-state="2"] .sp-drops i:nth-child(3){animation-delay:.6s}
+.squeeze-stick[data-state="3"] .sp-done{opacity:1;transform:scale(1)}
+@keyframes capTwist{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-35%) rotate(-24deg)}}
+@keyframes drip{0%{transform:translateY(10px);opacity:0}30%{opacity:1}100%{transform:translateY(-34px);opacity:0}}
 .timer{position:absolute;top:18px;right:20px;font-family:var(--mono);font-size:13px;background:var(--surface);border-radius:999px;padding:6px 12px}
 .steps{display:grid;gap:22px;padding-block:20px 40px}
 .step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:32px;min-height:46vh;display:flex;flex-direction:column;justify-content:center;gap:14px;transition:border-color .4s,transform .4s}

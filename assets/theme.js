@@ -114,8 +114,8 @@
       if (state === 2 && steps[1]) {
         var r = steps[1].getBoundingClientRect();
         var p = Math.min(1, Math.max(0, (mid - r.top) / Math.max(1, r.height)));
-        secs = p * 10; squeeze = 1 - 0.5 * p;
-      } else if (state === 3) { secs = 10; squeeze = 0.5; }
+        secs = p * 10; squeeze = 1 - 0.28 * p;
+      } else if (state === 3) { secs = 10; squeeze = 0.72; }
       stick.setAttribute('data-state', String(state));
       stick.style.setProperty('--sq', squeeze.toFixed(3));
       if (label) label.textContent = 'Step ' + state + ' · ' + (names[state - 1] || '');
