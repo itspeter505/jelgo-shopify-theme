@@ -1,4 +1,5 @@
 {%- assign story = pages[section.settings.story_page] -%}
+{%- assign creators = pages[section.settings.creators_page] -%}
 <footer class="site-foot">
   <div class="wrap">
     <div class="foot">
@@ -19,6 +20,7 @@
         <h4>Learn</h4>
         <a href="{{ routes.root_url }}#how">How it works</a>
         {%- if story != empty and story != blank -%}<a href="{{ story.url }}">Our story</a>{%- endif -%}
+        {%- if creators != empty and creators != blank -%}<a href="{{ creators.url }}">Creators</a>{%- endif -%}
         <a href="{{ routes.root_url }}#faq">FAQ</a>
       </div>
     </div>
@@ -32,6 +34,7 @@
   "settings": [
     { "type": "textarea", "id": "blurb", "label": "Short description", "default": "Daily vitamin jelly for people whose supplement routine falls apart on busy mornings and work trips. 15 vitamins and minerals, five flavours, shipped across Canada." },
     { "type": "text", "id": "story_page", "label": "Our story page handle", "default": "our-story" },
+    { "type": "text", "id": "creators_page", "label": "Creators page handle", "default": "creators" },
     { "type": "text", "id": "box_handle", "label": "Discovery box product handle", "default": "discovery-box" },
     { "type": "textarea", "id": "disclaimer", "label": "Disclaimer", "default": "Concept store built for Business 4572 (Online Retailing) at Ivey Business School. Checkout runs in test mode: no card is charged and no orders ship. Formulations and nutrition values are planning targets and have not been reviewed by Health Canada. Not intended to diagnose, treat, cure or prevent any disease." }
   ]

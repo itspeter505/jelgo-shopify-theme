@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-creators",
+      "blocks": {
+        "idea1": { "type": "idea", "settings": { "length": "10 s", "title": "The 7 a.m. train", "text": "Twist, squeeze and done before the doors close. Film it on the platform, start to finish." } },
+        "idea2": { "type": "idea", "settings": { "length": "15 s", "title": "What's in my desk drawer", "text": "Open the drawer, show the stash, have one between calls." } },
+        "idea3": { "type": "idea", "settings": { "length": "15 s", "title": "Carry-on check", "text": "A week of pouches in a carry-on, through security with no powder tubs." } },
+        "idea4": { "type": "idea", "settings": { "length": "10 s", "title": "Gym bag essentials", "text": "Towel, headphones, shoes, jelgo. Have one on the way in." } },
+        "idea5": { "type": "idea", "settings": { "length": "30 s", "title": "Ranking all five flavours", "text": "Try the Discovery Box on camera and rank them. Honest opinions only." } },
+        "idea6": { "type": "idea", "settings": { "length": "20 s", "title": "Pills vs powder vs pouch", "text": "Show your old routine next to the new one, and time each." } }
+      },
+      "block_order": ["idea1", "idea2", "idea3", "idea4", "idea5", "idea6"],
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}
