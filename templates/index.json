@@ -180,8 +180,8 @@
         "q6": {
           "type": "question",
           "settings": {
-            "question": "How does the subscription work?",
-            "answer": "<p>Choose a 30-pack or the Variety Box, delivered every 30 days, and save 20% on every order. Skip, swap flavours or cancel from your account before the next ship date.</p>"
+            "question": "Which pack should I buy?",
+            "answer": "<p>New to jelgo? Start with the Discovery Box: ten pouches, two of every flavour. Once you know your favourite, a 30-pouch pack is one month of jelgo and works out to about $1.97 a pouch.</p>"
           }
         },
         "q7": {
