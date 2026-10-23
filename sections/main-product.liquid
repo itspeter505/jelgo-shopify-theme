@@ -37,7 +37,23 @@
   <div class="pdp">
     <div class="pdp-media{% if product.tags contains 'bundle' and product.featured_image %} full{% endif %}">
       {%- unless product.tags contains 'bundle' -%}<span class="ring" aria-hidden="true"></span>{%- endunless -%}
-      <div class="pouch-holder wob">{%- render 'pouch', p: product, uid: section.id -%}</div>
+      {%- if product.tags contains 'spin' -%}
+        {%- assign spin_front = 'spin-' | append: product.handle | append: '-front.webp' -%}
+        {%- assign spin_back = 'spin-' | append: product.handle | append: '-back.webp' -%}
+        <div class="spin" data-spin tabindex="0" role="img" aria-label="{{ product.title | escape }} pouch. Drag or use the arrow keys to turn it around and see the back.">
+          <span class="spin-shadow" aria-hidden="true"></span>
+          <div class="spin-card" data-spin-card>
+            <img class="spin-face spin-front" src="{{ spin_front | asset_url }}" alt="" width="800" height="1160" draggable="false" fetchpriority="high">
+            <img class="spin-face spin-back" src="{{ spin_back | asset_url }}" alt="" width="800" height="1160" draggable="false" loading="lazy">
+          </div>
+        </div>
+        <div class="spin-ui">
+          <span class="spin-hint"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14.5-4.6M20 12a8 8 0 0 1-14.5 4.6M18.5 3v4.4h-4.4M5.5 21v-4.4h4.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Drag to spin 360°</span>
+          <span class="spin-btns"><button type="button" data-spin-to="0" aria-pressed="true">Front</button><button type="button" data-spin-to="180" aria-pressed="false">Back</button></span>
+        </div>
+      {%- else -%}
+        <div class="pouch-holder wob">{%- render 'pouch', p: product, uid: section.id -%}</div>
+      {%- endif -%}
     </div>
     <div>
       <div class="crumbs"><a href="{{ routes.all_products_collection_url }}">Shop</a><span>/</span><span>{{ product.title | escape }}</span></div>

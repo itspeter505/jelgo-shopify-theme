@@ -467,3 +467,19 @@ footer.site-foot{margin-top:88px;border-top:1px solid var(--line);padding-block:
   .cr-steps,.cr-ideas{grid-template-columns:1fr}
 }
 @media (max-width:520px){.cr-wall{columns:1}.cr-two{grid-template-columns:1fr}.cr-stack{height:300px}}
+
+/* ---------- 360 pouch viewer ---------- */
+.pdp-media .spin{position:absolute;inset:3% 6% 12%;perspective:1800px;cursor:grab;touch-action:pan-y;outline:none;user-select:none;-webkit-user-select:none}
+.pdp-media .spin:focus-visible{outline:2px solid var(--ink);outline-offset:6px;border-radius:20px}
+.spin.dragging{cursor:grabbing}
+.spin-card{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateY(calc(var(--ry,0) * 1deg));will-change:transform}
+.spin-face{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;backface-visibility:hidden;-webkit-backface-visibility:hidden;pointer-events:none}
+.spin-back{transform:rotateY(180deg)}
+.spin-shadow{position:absolute;left:50%;bottom:-1%;width:60%;height:7%;transform:translateX(-50%) scaleX(var(--sw,1));border-radius:50%;background:radial-gradient(closest-side,rgba(21,23,42,.28),transparent);filter:blur(4px)}
+.spin-ui{position:absolute;left:0;right:0;bottom:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 20px;pointer-events:none}
+.spin-hint{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;color:var(--muted);transition:opacity .4s}
+.spin-hint.gone{opacity:0}
+.spin-btns{display:inline-flex;background:var(--bg);border-radius:999px;padding:4px;pointer-events:auto}
+.spin-btns button{border:0;background:transparent;font:inherit;font-weight:700;font-size:13px;padding:7px 14px;border-radius:999px;color:var(--muted);cursor:pointer}
+.spin-btns button[aria-pressed=true]{background:var(--ink);color:#fff}
+@media (max-width:520px){.spin-hint{font-size:11px}.spin-ui{padding:0 12px;bottom:12px}}
