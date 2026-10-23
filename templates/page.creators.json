@@ -3,14 +3,14 @@
     "main": {
       "type": "main-creators",
       "blocks": {
-        "idea1": { "type": "idea", "settings": { "length": "10 s", "title": "The 7 a.m. train", "text": "Twist, squeeze and done before the doors close. Film it on the platform, start to finish." } },
-        "idea2": { "type": "idea", "settings": { "length": "15 s", "title": "What's in my desk drawer", "text": "Open the drawer, show the stash, have one between calls." } },
-        "idea3": { "type": "idea", "settings": { "length": "15 s", "title": "Carry-on check", "text": "A week of pouches in a carry-on, through security with no powder tubs." } },
-        "idea4": { "type": "idea", "settings": { "length": "10 s", "title": "Gym bag essentials", "text": "Towel, headphones, shoes, jelgo. Have one on the way in." } },
-        "idea5": { "type": "idea", "settings": { "length": "30 s", "title": "Ranking all five flavours", "text": "Try the Discovery Box on camera and rank them. Honest opinions only." } },
-        "idea6": { "type": "idea", "settings": { "length": "20 s", "title": "Pills vs powder vs pouch", "text": "Show your old routine next to the new one, and time each." } }
+        "r1": { "type": "review", "settings": { "sample": true, "name": "Maya R.", "role": "Night-shift nurse, Toronto", "flavour": "Blueberry Peach|7366DE|peach", "rating": 5, "title": "I finally stopped forgetting", "quote": "The same bottle of vitamins sat in my locker for a year. A pouch at the start of every shift is something I actually do. Blueberry Peach tastes like dessert, not medicine." } },
+        "r2": { "type": "review", "settings": { "sample": true, "name": "Daniel K.", "role": "Consultant, flies every week", "flavour": "Raspberry Grapefruit|E8505B|raspberry-grapefruit", "rating": 5, "title": "No more powder at security", "quote": "I used to get pulled aside for my tub of greens powder. Seven pouches fit in my carry-on, and there's no shaker to rinse in a hotel sink." } },
+        "r3": { "type": "review", "settings": { "sample": true, "name": "Sophie L.", "role": "Marketing manager, Montreal", "flavour": "Orange Mango|F28C1E|orange-mango", "rating": 5, "title": "Ten seconds, honestly", "quote": "I timed it for my video: twist, squeeze, done before the 7:40 train pulled in. It's the only part of my morning that's never late." } },
+        "r4": { "type": "review", "settings": { "sample": true, "name": "Jordan T.", "role": "Personal trainer, Calgary", "flavour": "Grape Raspberry|A23FC2|grape-raspberry", "rating": 5, "title": "Lives in my gym bag", "quote": "No fridge, no water, no scoop. I hand them to clients who skipped breakfast, and Grape Raspberry is the one everyone asks for again." } },
+        "r5": { "type": "review", "settings": { "sample": true, "name": "Priya S.", "role": "Grad student, Waterloo", "flavour": "Green Apple Lime|8DC63F|green-apple-lime", "rating": 4, "title": "Tart in the best way", "quote": "Green Apple Lime wakes me up better than a second coffee. One star off only because I want a bigger box for exam season." } },
+        "r6": { "type": "review", "settings": { "sample": true, "name": "Marcus W.", "role": "Software developer, Vancouver", "flavour": "Orange Mango|F28C1E|orange-mango", "rating": 4, "title": "Ranked all five on camera", "quote": "Did the Discovery Box ranking video. Orange Mango won, Green Apple Lime was a close second, and nobody in the comments agreed with me. Easiest content I've made all year." } }
       },
-      "block_order": ["idea1", "idea2", "idea3", "idea4", "idea5", "idea6"],
+      "block_order": ["r1", "r2", "r3", "r4", "r5", "r6"],
       "settings": {}
     }
   },

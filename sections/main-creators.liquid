@@ -1,8 +1,15 @@
 {%- liquid
-  assign creator_count = 0
+  assign review_count = 0
+  assign sample_count = 0
+  assign idea_count = 0
   for block in section.blocks
-    if block.type == 'creator'
-      assign creator_count = creator_count | plus: 1
+    if block.type == 'review'
+      assign review_count = review_count | plus: 1
+      if block.settings.sample
+        assign sample_count = sample_count | plus: 1
+      endif
+    elsif block.type == 'idea'
+      assign idea_count = idea_count | plus: 1
     endif
   endfor
 -%}
@@ -13,24 +20,71 @@
       <h1>{{ section.settings.heading | escape }}</h1>
       <p class="cr-lede">{{ section.settings.lede | escape }}</p>
       <div class="hero-cta">
-        <a class="btn btn-ink" href="#apply">Apply to be a creator</a>
-        <a class="btn btn-ghost" href="#spotlight">See the spotlight</a>
+        <a class="btn btn-ink" href="#reviews">Read the reviews</a>
+        <a class="btn btn-ghost" href="#apply">Become a creator</a>
       </div>
     </div>
     <div class="cr-stack" aria-hidden="true">
       {%- assign shown = 0 -%}
-      {%- for p in collections.all.products limit: 24 -%}
-        {%- if p.tags contains 'bundle' or shown >= 3 -%}{%- continue -%}{%- endif -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type != 'review' or shown >= 3 -%}{%- continue -%}{%- endif -%}
         {%- assign shown = shown | plus: 1 -%}
-        {%- assign uid = section.id | append: 'c' | append: forloop.index -%}
-        {%- assign pc = '' -%}{%- for t in p.tags -%}{%- if t contains 'pouch:' -%}{%- assign pc = t | remove: 'pouch:' | strip -%}{%- endif -%}{%- endfor -%}
-        <div class="cr-phone"{% if pc != blank %} style="--p:#{{ pc }}"{% endif %}>
-          <div class="cr-screen">{%- render 'pouch', p: p, uid: uid -%}</div>
-          <span class="cr-tag">{{ section.settings.tag_prefix | escape }} {{ p.title | escape }}</span>
+        {%- assign f = block.settings.flavour | split: '|' -%}
+        {%- assign fp = all_products[f[2]] -%}
+        <div class="cr-phone" style="--p:#{{ f[1] }}">
+          <div class="cr-screen">
+            {%- if fp.featured_image -%}{{ fp.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
+            <span class="cr-bubble">“{{ block.settings.title | escape }}”</span>
+          </div>
+          <span class="cr-tag">▶ {{ block.settings.name | escape }}</span>
         </div>
       {%- endfor -%}
     </div>
   </div>
+
+  <section class="band tight" id="reviews">
+    <div class="sec-head">
+      <h2>{{ section.settings.reviews_heading | escape }}</h2>
+      <p>{{ section.settings.reviews_intro | escape }}</p>
+    </div>
+    {%- if sample_count > 0 and section.settings.sample_note != blank -%}
+      <p class="cr-note"><b>Sample reviews</b> {{ section.settings.sample_note | escape }}</p>
+    {%- endif -%}
+    <div class="cr-wall">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'review' -%}
+          {%- assign f = block.settings.flavour | split: '|' -%}
+          {%- assign fp = all_products[f[2]] -%}
+          <article class="cr-review" style="--p:#{{ f[1] }}" {{ block.shopify_attributes }}>
+            <div class="cr-rtop">
+              <span class="cr-stars" aria-label="{{ block.settings.rating }} out of 5">
+                {%- for i in (1..5) -%}<i{% if i > block.settings.rating %} class="off"{% endif %}></i>{%- endfor -%}
+              </span>
+              {%- if block.settings.sample -%}<span class="cr-sample">Sample</span>{%- endif -%}
+            </div>
+            <h3>{{ block.settings.title | escape }}</h3>
+            <p class="cr-quote">{{ block.settings.quote | escape }}</p>
+            <div class="cr-who">
+              <span class="cr-av">{{ block.settings.name | slice: 0 | upcase }}</span>
+              <span><b>{{ block.settings.name | escape }}</b><small>{{ block.settings.role | escape }}</small></span>
+              {%- if fp -%}
+                <a class="cr-fl" href="{{ fp.url }}">
+                  {%- if fp.featured_image -%}{{ fp.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
+                  <span>{{ f[0] | escape }}</span>
+                </a>
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+      <a class="cr-review cr-empty" href="#apply">
+        <span class="cr-plus">+</span>
+        <h3>{{ section.settings.empty_title | escape }}</h3>
+        <p class="cr-quote">{{ section.settings.empty_text | escape }}</p>
+        <span class="cr-link">Apply below</span>
+      </a>
+    </div>
+  </section>
 
   <section class="band tight">
     <div class="sec-head"><h2>{{ section.settings.how_heading | escape }}</h2></div>
@@ -41,47 +95,7 @@
     </ol>
   </section>
 
-  <section class="band tight" id="spotlight">
-    <div class="sec-head">
-      <h2>{{ section.settings.spotlight_heading | escape }}</h2>
-      <p>{{ section.settings.spotlight_intro | escape }}</p>
-    </div>
-    <div class="cr-grid">
-      {%- for block in section.blocks -%}
-        {%- if block.type == 'creator' -%}
-          <article class="cr-card" {{ block.shopify_attributes }}>
-            <div class="cr-media">
-              {%- if block.settings.image -%}
-                {{ block.settings.image | image_url: width: 700 | image_tag: loading: 'lazy', alt: block.settings.name, widths: '350, 700' }}
-              {%- else -%}
-                <span class="cr-initial">{{ block.settings.name | slice: 0 | upcase }}</span>
-              {%- endif -%}
-              {%- if block.settings.flavour != blank -%}<span class="cr-flav">{{ block.settings.flavour | escape }}</span>{%- endif -%}
-            </div>
-            <div class="cr-body">
-              <h3>{{ block.settings.name | escape }}</h3>
-              <p class="cr-meta">{{ block.settings.handle | escape }}{% if block.settings.platform != blank %} · {{ block.settings.platform | escape }}{% endif %}</p>
-              {%- if block.settings.about != blank -%}<p>{{ block.settings.about | escape }}</p>{%- endif -%}
-              {%- if block.settings.link != blank -%}<a class="cr-link" href="{{ block.settings.link }}" target="_blank" rel="noopener">Watch the video</a>{%- endif -%}
-            </div>
-          </article>
-        {%- endif -%}
-      {%- endfor -%}
-      {%- assign open_slots = 3 | minus: creator_count -%}
-      {%- if open_slots < 1 -%}{%- assign open_slots = 1 -%}{%- endif -%}
-      {%- for i in (1..open_slots) -%}
-        <a class="cr-card cr-empty" href="#apply">
-          <div class="cr-media"><span class="cr-plus">+</span></div>
-          <div class="cr-body">
-            <h3>{{ section.settings.empty_title | escape }}</h3>
-            <p>{{ section.settings.empty_text | escape }}</p>
-            <span class="cr-link">Apply below</span>
-          </div>
-        </a>
-      {%- endfor -%}
-    </div>
-  </section>
-
+  {%- if idea_count > 0 -%}
   <section class="band tight">
     <div class="sec-head">
       <h2>{{ section.settings.ideas_heading | escape }}</h2>
@@ -99,6 +113,7 @@
       {%- endfor -%}
     </div>
   </section>
+  {%- endif -%}
 
   <section class="band tight" id="apply">
     <div class="cr-apply">
@@ -128,7 +143,7 @@
             <div class="field"><label for="cr-followers">Followers (roughly)</label><input id="cr-followers" name="contact[followers]" inputmode="numeric" placeholder="e.g. 12,000"></div>
             <div class="field"><label for="cr-why">What would your 10-second video be?</label><textarea id="cr-why" name="contact[body]" rows="4" placeholder="Your routine, your commute, your gym bag…"></textarea></div>
             <button class="btn btn-ink" type="submit" style="width:100%">Send application</button>
-            <p class="jg-small" style="color:var(--muted);font-size:13px;margin-top:10px">Applications go to the jelgo team by email. This is a student concept store, so the program is in planning.</p>
+            <p style="color:var(--muted);font-size:13px;margin-top:10px">Applications go to the jelgo team by email.</p>
           {%- endif -%}
         {%- endform -%}
       </div>
@@ -138,48 +153,53 @@
 
 {% schema %}
 {
-  "name": "Creator program",
+  "name": "Creator reviews",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "jelgo creators" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Show us your ten seconds." },
-    { "type": "textarea", "id": "lede", "label": "Intro", "default": "We're building jelgo with the people who actually use it. Film how a pouch fits into your day, and we'll send the boxes, share your video and give your followers a code." },
-    { "type": "text", "id": "tag_prefix", "label": "Phone caption prefix", "default": "▶" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Creator reviews" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What creators say after a week of jelgo." },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "We sent boxes to commuters, nurses, trainers and frequent flyers and asked one thing: does a pouch actually fit into your day? Here's what they told us." },
+    { "type": "header", "content": "Reviews" },
+    { "type": "text", "id": "reviews_heading", "label": "Heading", "default": "In their words" },
+    { "type": "textarea", "id": "reviews_intro", "label": "Intro", "default": "Taste, routine and the ten seconds in between." },
+    { "type": "textarea", "id": "sample_note", "label": "Sample notice", "info": "Shown while any review is ticked as a sample.", "default": "jelgo is a student concept store, so these reviews were written by our team to show the kind of feedback creators share. They'll be replaced by real reviews as creators try the product." },
+    { "type": "text", "id": "empty_title", "label": "Last card title", "default": "Your review here" },
+    { "type": "textarea", "id": "empty_text", "label": "Last card text", "default": "Want to try jelgo on camera? We're picking our next creators now." },
     { "type": "header", "content": "How it works" },
-    { "type": "text", "id": "how_heading", "label": "Heading", "default": "How the program works" },
+    { "type": "text", "id": "how_heading", "label": "Heading", "default": "How the creator program works" },
     { "type": "text", "id": "s1_title", "label": "Step 1 title", "default": "We send you a box" },
     { "type": "textarea", "id": "s1_text", "label": "Step 1 text", "default": "A free 30-Day Variety Box, so you can find your flavour and film it in your real routine." },
     { "type": "text", "id": "s2_title", "label": "Step 2 title", "default": "You film ten seconds" },
     { "type": "textarea", "id": "s2_text", "label": "Step 2 text", "default": "Twist, squeeze, go: on your commute, at your desk or in your gym bag. Your style, your words, no script." },
     { "type": "text", "id": "s3_title", "label": "Step 3 title", "default": "Your followers save" },
-    { "type": "textarea", "id": "s3_text", "label": "Step 3 text", "default": "You get a personal code for 15% off your followers' first order, and we feature your video on this page." },
-    { "type": "header", "content": "Spotlight" },
-    { "type": "text", "id": "spotlight_heading", "label": "Heading", "default": "Creator spotlight" },
-    { "type": "textarea", "id": "spotlight_intro", "label": "Intro", "default": "Real people, real routines. We're choosing our first creators now." },
-    { "type": "text", "id": "empty_title", "label": "Open slot title", "default": "Your video here" },
-    { "type": "textarea", "id": "empty_text", "label": "Open slot text", "default": "We're picking our first five creators. Commuters, gym regulars and frequent flyers especially welcome." },
+    { "type": "textarea", "id": "s3_text", "label": "Step 3 text", "default": "You get a personal code for 15% off your followers' first order, and we feature your review on this page." },
     { "type": "header", "content": "Content ideas" },
     { "type": "text", "id": "ideas_heading", "label": "Heading", "default": "Ideas that work" },
-    { "type": "textarea", "id": "ideas_intro", "label": "Intro", "default": "Short, real and in the moment. Here's what we'd love to see." },
+    { "type": "textarea", "id": "ideas_intro", "label": "Intro", "default": "Short, real and in the moment." },
     { "type": "header", "content": "Application" },
-    { "type": "text", "id": "apply_heading", "label": "Heading", "default": "Apply to be a jelgo creator" },
+    { "type": "text", "id": "apply_heading", "label": "Heading", "default": "Want to be featured here?" },
     { "type": "textarea", "id": "apply_text", "label": "Text", "default": "Any size of following is welcome. We care more about how real your routine is than how many people watch it." },
     { "type": "text", "id": "perk1", "label": "Perk 1", "default": "A free 30-Day Variety Box to start" },
     { "type": "text", "id": "perk2", "label": "Perk 2", "default": "Your own 15% code for your followers" },
-    { "type": "text", "id": "perk3", "label": "Perk 3", "default": "Your video featured in the spotlight" }
+    { "type": "text", "id": "perk3", "label": "Perk 3", "default": "Your review featured on this page" }
   ],
   "blocks": [
     {
-      "type": "creator",
-      "name": "Creator",
+      "type": "review",
+      "name": "Creator review",
       "settings": [
-        { "type": "paragraph", "content": "Only add real creators who have agreed to be featured." },
-        { "type": "text", "id": "name", "label": "Name", "default": "Creator name" },
-        { "type": "text", "id": "handle", "label": "Handle", "default": "@handle" },
-        { "type": "text", "id": "platform", "label": "Platform", "default": "TikTok" },
-        { "type": "image_picker", "id": "image", "label": "Photo or video still" },
-        { "type": "text", "id": "flavour", "label": "Favourite flavour" },
-        { "type": "textarea", "id": "about", "label": "About their routine" },
-        { "type": "url", "id": "link", "label": "Video link" }
+        { "type": "checkbox", "id": "sample", "label": "Sample review (written by our team)", "default": true, "info": "Untick only for a real review from a real creator who agreed to be featured." },
+        { "type": "text", "id": "name", "label": "Name", "default": "Creator" },
+        { "type": "text", "id": "role", "label": "Who they are", "default": "Commuter, Toronto" },
+        { "type": "select", "id": "flavour", "label": "Favourite flavour", "default": "Orange Mango|F28C1E|orange-mango", "options": [
+          { "value": "Orange Mango|F28C1E|orange-mango", "label": "Orange Mango" },
+          { "value": "Grape Raspberry|A23FC2|grape-raspberry", "label": "Grape Raspberry" },
+          { "value": "Raspberry Grapefruit|E8505B|raspberry-grapefruit", "label": "Raspberry Grapefruit" },
+          { "value": "Green Apple Lime|8DC63F|green-apple-lime", "label": "Green Apple Lime" },
+          { "value": "Blueberry Peach|7366DE|peach", "label": "Blueberry Peach" }
+        ] },
+        { "type": "range", "id": "rating", "label": "Stars", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "title", "label": "Headline", "default": "Fits my morning" },
+        { "type": "textarea", "id": "quote", "label": "Review" }
       ]
     },
     {
@@ -192,6 +212,6 @@
       ]
     }
   ],
-  "presets": [{ "name": "Creator program" }]
+  "presets": [{ "name": "Creator reviews" }]
 }
 {% endschema %}

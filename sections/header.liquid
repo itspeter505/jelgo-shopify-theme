@@ -10,7 +10,7 @@
         <a href="{{ routes.all_products_collection_url }}"{% if template.name == 'collection' %} aria-current="page"{% endif %}>Shop</a>
         <a href="{{ routes.root_url }}#how">How it works</a>
         {%- if story != empty and story != blank -%}<a href="{{ story.url }}"{% if page.handle == story.handle %} aria-current="page"{% endif %}>Our story</a>{%- endif -%}
-        {%- if creators != empty and creators != blank -%}<a href="{{ creators.url }}"{% if page.handle == creators.handle %} aria-current="page"{% endif %}>Creators</a>{%- endif -%}
+        {%- if creators != empty and creators != blank -%}<a href="{{ creators.url }}"{% if page.handle == creators.handle %} aria-current="page"{% endif %}>{{ section.settings.creators_label | default: "Reviews" | escape }}</a>{%- endif -%}
         <a href="{{ routes.root_url }}#faq">FAQ</a>
       </nav>
       <div class="nav-right">
@@ -26,7 +26,7 @@
       <a href="{{ routes.all_products_collection_url }}">Shop</a>
       <a href="{{ routes.root_url }}#how">How it works</a>
       {%- if story != empty and story != blank -%}<a href="{{ story.url }}">Our story</a>{%- endif -%}
-      {%- if creators != empty and creators != blank -%}<a href="{{ creators.url }}">Creators</a>{%- endif -%}
+      {%- if creators != empty and creators != blank -%}<a href="{{ creators.url }}">{{ section.settings.creators_label | default: "Reviews" | escape }}</a>{%- endif -%}
       <a href="{{ routes.root_url }}#faq">FAQ</a>
     </nav>
   </div>
@@ -37,7 +37,8 @@
   "name": "Header",
   "settings": [
     { "type": "text", "id": "story_page", "label": "Our story page handle", "default": "our-story", "info": "Create a page with this handle (Online Store > Pages) and the link appears in the menu." },
-    { "type": "text", "id": "creators_page", "label": "Creators page handle", "default": "creators" }
+    { "type": "text", "id": "creators_page", "label": "Creator reviews page handle", "default": "reviews" },
+    { "type": "text", "id": "creators_label", "label": "Creator reviews menu label", "default": "Reviews" }
   ]
 }
 {% endschema %}
