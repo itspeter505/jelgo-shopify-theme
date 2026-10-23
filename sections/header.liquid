@@ -1,0 +1,39 @@
+{%- liquid
+  assign story = pages[section.settings.story_page]
+-%}
+<header class="top">
+  <div class="wrap">
+    <div class="nav">
+      <a class="logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home"><span>{{ shop.name | downcase | escape }}</span><i></i></a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="{{ routes.all_products_collection_url }}"{% if template.name == 'collection' %} aria-current="page"{% endif %}>Shop</a>
+        <a href="{{ routes.root_url }}#how">How it works</a>
+        {%- if story != empty and story != blank -%}<a href="{{ story.url }}"{% if page.handle == story.handle %} aria-current="page"{% endif %}>Our story</a>{%- endif -%}
+        <a href="{{ routes.root_url }}#faq">FAQ</a>
+      </nav>
+      <div class="nav-right">
+        {%- if shop.customer_accounts_enabled -%}
+          <a class="icon-link" href="{{ routes.account_url }}" aria-label="Account">
+            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3 18c1-3.6 3.8-5.4 7-5.4s6 1.8 7 5.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </a>
+        {%- endif -%}
+        <a class="bag-btn" href="{{ routes.cart_url }}" data-open-bag>Bag <span class="bag-count tnum" data-cart-count>{{ cart.item_count }}</span></a>
+      </div>
+    </div>
+    <nav class="mnav" aria-label="Main mobile">
+      <a href="{{ routes.all_products_collection_url }}">Shop</a>
+      <a href="{{ routes.root_url }}#how">How it works</a>
+      {%- if story != empty and story != blank -%}<a href="{{ story.url }}">Our story</a>{%- endif -%}
+      <a href="{{ routes.root_url }}#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "text", "id": "story_page", "label": "Our story page handle", "default": "our-story", "info": "Create a page with this handle (Online Store > Pages) and the link appears in the menu." }
+  ]
+}
+{% endschema %}

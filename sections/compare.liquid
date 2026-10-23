@@ -1,0 +1,74 @@
+{%- liquid
+  assign first = collections.all.products.first
+  for p in collections.all.products limit: 24
+    unless p.tags contains 'bundle'
+      assign first = p
+      break
+    endunless
+  endfor
+-%}
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>{{ section.settings.heading | escape }}</h2>
+      <p>{{ section.settings.intro | escape }}</p>
+    </div>
+    <div class="compare">
+      <article class="cmp">
+        <div class="glyph" aria-hidden="true"><svg width="90" height="44" viewBox="0 0 90 44"><rect x="2" y="8" width="56" height="28" rx="14" fill="none" stroke="currentColor" stroke-width="2.5"/><line x1="30" y1="8" x2="30" y2="36" stroke="currentColor" stroke-width="2.5"/><circle cx="76" cy="22" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/></svg></div>
+        <h3>{{ section.settings.a_title | escape }}</h3>
+        <ul>
+          <li><span>Effort</span><span>{{ section.settings.a_effort | escape }}</span></li>
+          <li><span>Feel</span><span>{{ section.settings.a_feel | escape }}</span></li>
+          <li><span>On the go</span><span>{{ section.settings.a_go | escape }}</span></li>
+        </ul>
+      </article>
+      <article class="cmp">
+        <div class="glyph" aria-hidden="true"><svg width="90" height="54" viewBox="0 0 90 54"><path d="M14 10h34l-4 40H18z" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M60 46c6 0 10-3 14-3s8 3 12 3" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="66" cy="30" r="2.5" fill="currentColor"/><circle cx="76" cy="24" r="2" fill="currentColor"/><circle cx="72" cy="36" r="1.6" fill="currentColor"/></svg></div>
+        <h3>{{ section.settings.b_title | escape }}</h3>
+        <ul>
+          <li><span>Effort</span><span>{{ section.settings.b_effort | escape }}</span></li>
+          <li><span>Feel</span><span>{{ section.settings.b_feel | escape }}</span></li>
+          <li><span>On the go</span><span>{{ section.settings.b_go | escape }}</span></li>
+        </ul>
+      </article>
+      <article class="cmp us">
+        <div class="glyph" aria-hidden="true" style="width:44px">{%- if first -%}{%- render 'pouch', p: first, uid: section.id -%}{%- endif -%}</div>
+        <h3>{{ section.settings.c_title | escape }}</h3>
+        <ul>
+          <li><span>Effort</span><span>{{ section.settings.c_effort | escape }}</span></li>
+          <li><span>Feel</span><span>{{ section.settings.c_feel | escape }}</span></li>
+          <li><span>On the go</span><span>{{ section.settings.c_go | escape }}</span></li>
+        </ul>
+      </article>
+    </div>
+    {%- if section.settings.honest != blank -%}<p class="honest">{{ section.settings.honest | escape }}</p>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Format comparison",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Pills, powder or a pouch?" },
+    { "type": "textarea", "id": "intro", "label": "Intro", "default": "Most people don't quit supplements because they stop caring. They quit because the routine doesn't survive a 7 a.m. train or a three-day work trip." },
+    { "type": "header", "content": "Column 1" },
+    { "type": "text", "id": "a_title", "label": "Title", "default": "Pills" },
+    { "type": "text", "id": "a_effort", "label": "Effort", "default": "Several capsules and a glass of water" },
+    { "type": "text", "id": "a_feel", "label": "Feel", "default": "Large tablets are hard for some people to swallow" },
+    { "type": "text", "id": "a_go", "label": "On the go", "default": "A rattling bottle or a weekly pill case" },
+    { "type": "header", "content": "Column 2" },
+    { "type": "text", "id": "b_title", "label": "Title", "default": "Greens powders (AG1, IM8)" },
+    { "type": "text", "id": "b_effort", "label": "Effort", "default": "Scoop, mix with cold water, shake, then wash the shaker" },
+    { "type": "text", "id": "b_feel", "label": "Feel", "default": "Earthy taste; texture depends on how well you shook it" },
+    { "type": "text", "id": "b_go", "label": "On the go", "default": "Travel sachets help, but you still need water and a bottle" },
+    { "type": "header", "content": "Column 3 (yours)" },
+    { "type": "text", "id": "c_title", "label": "Title", "default": "A jelgo pouch" },
+    { "type": "text", "id": "c_effort", "label": "Effort", "default": "Twist the cap and squeeze. Done in about ten seconds" },
+    { "type": "text", "id": "c_feel", "label": "Feel", "default": "Smooth drinkable jelly in five fruit flavours" },
+    { "type": "text", "id": "c_go", "label": "On the go", "default": "One pouch in a laptop bag, coat pocket or carry-on" },
+    { "type": "textarea", "id": "honest", "label": "Trade-off note", "default": "Where pouches lose: a pouch uses more packaging than a scoop of powder, and it carries 15 vitamins and minerals rather than the long ingredient list of a greens powder. We think the convenience is worth it for people who keep skipping their routine." }
+  ],
+  "presets": [{ "name": "Format comparison" }]
+}
+{% endschema %}

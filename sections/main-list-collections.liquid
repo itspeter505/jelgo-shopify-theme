@@ -1,0 +1,12 @@
+<div class="wrap">
+  <div class="page-head"><h1>Collections</h1></div>
+  <div class="lineup">
+    {%- for c in collections -%}
+      <article class="card"><h3><a href="{{ c.url }}">{{ c.title | escape }}</a></h3><span class="flav">{{ c.products_count }} products</span></article>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{ "name": "Collections list", "settings": [] }
+{% endschema %}

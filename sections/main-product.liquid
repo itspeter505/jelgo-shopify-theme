@@ -1,0 +1,147 @@
+{%- liquid
+  assign current = product.selected_or_first_available_variant
+  assign goal = ''
+  assign pf = ''
+  assign tag_pack = 0
+  assign pills = ''
+  for tag in product.tags
+    if tag contains 'goal:'
+      assign goal = tag | remove: 'goal:' | strip
+    elsif tag contains 'flavour:'
+      assign pf = tag | remove: 'flavour:' | strip
+    elsif tag contains 'pouches:'
+      assign tag_pack = tag | remove: 'pouches:' | strip | plus: 0
+    elsif tag contains 'pill:'
+      assign pill = tag | remove: 'pill:' | strip
+      assign pills = pills | append: pill | append: '||'
+    endif
+  endfor
+  assign pill_list = pills | split: '||'
+  assign single = false
+  if product.has_only_default_variant
+    assign single = true
+  endif
+  assign has_plans = false
+  if product.selling_plan_groups.size > 0
+    assign has_plans = true
+  endif
+-%}
+<div class="wrap">
+  <div class="pdp">
+    <div class="pdp-media{% if product.tags contains 'bundle' and product.featured_image %} full{% endif %}">
+      {%- unless product.tags contains 'bundle' -%}<span class="ring" aria-hidden="true"></span>{%- endunless -%}
+      <div class="pouch-holder wob">{%- render 'pouch', p: product, uid: section.id -%}</div>
+    </div>
+    <div>
+      <div class="crumbs"><a href="{{ routes.all_products_collection_url }}">Shop</a><span>/</span><span>{{ product.title | escape }}</span></div>
+      {%- if goal != blank -%}<p class="eyebrow">{{ goal | escape }}</p>{%- endif -%}
+      <h1>{{ product.title | escape }}</h1>
+      <div class="pills">
+        {%- if pf != blank -%}<span class="pill">{{ pf | escape }}</span>{%- endif -%}
+        {%- for pl in pill_list -%}{%- if pl != blank -%}<span class="pill">{{ pl | escape }}</span>{%- endif -%}{%- endfor -%}
+      </div>
+
+      {%- form 'product', product, data-product-form: '', data-ajax-add: '', novalidate: 'novalidate' -%}
+        {%- if single -%}
+          {%- liquid
+            assign pack = tag_pack
+          -%}
+          <input type="hidden" name="id" value="{{ current.id }}" data-price="{{ current.price }}" data-pack="{{ pack }}" data-available="{{ current.available }}">
+          <div class="opt-label" style="margin-top:24px"><span class="tnum" style="font-family:var(--display);font-size:26px;color:var(--ink);font-weight:700">{{ current.price | money }}</span><span data-per></span></div>
+        {%- else -%}
+          <fieldset class="opt">
+            <legend>{{ product.options.first | escape }} <span data-per></span></legend>
+            <div class="sizes">
+              {%- for variant in product.variants -%}
+                {%- liquid
+                  assign pack = variant.option1 | remove: '-pack' | remove: ' pack' | remove: ' pouches' | strip | plus: 0
+                  if pack == 0
+                    assign pack = tag_pack
+                  endif
+                -%}
+                <div class="size">
+                  <input type="radio" id="v-{{ variant.id }}" name="id" value="{{ variant.id }}" data-price="{{ variant.price }}" data-pack="{{ pack }}" data-available="{{ variant.available }}"{% if variant.id == current.id %} checked{% endif %}{% unless variant.available %} disabled{% endunless %}>
+                  <label for="v-{{ variant.id }}"><b>{{ variant.title | escape }}</b><span class="tnum">{{ variant.price | money }}</span></label>
+                </div>
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endif -%}
+
+        {%- if has_plans -%}
+          <fieldset class="opt">
+            <legend>How do you want it?</legend>
+            <div class="plans">
+              {%- for group in product.selling_plan_groups -%}
+                {%- for plan in group.selling_plans -%}
+                  {%- liquid
+                    assign pct = 0
+                    assign adj = plan.price_adjustments.first
+                    if adj.value_type == 'percentage'
+                      assign pct = adj.value
+                    endif
+                  -%}
+                  <div class="plan">
+                    <input type="radio" id="sp-{{ plan.id }}" name="selling_plan" value="{{ plan.id }}" data-pct="{{ pct }}"{% if forloop.parentloop.first and forloop.first %} checked{% endif %}>
+                    <label for="sp-{{ plan.id }}"><span class="radio"></span><span><b>{{ plan.name | escape }}{% if pct > 0 %}<span class="save">{{ pct }}% off</span>{% endif %}</b><small>{{ section.settings.sub_note | escape }}</small></span><span class="pr tnum" data-plan-price data-plan-pct="{{ pct }}"></span></label>
+                  </div>
+                {%- endfor -%}
+              {%- endfor -%}
+              {%- unless product.requires_selling_plan -%}
+                <div class="plan">
+                  <input type="radio" id="sp-none-{{ section.id }}" name="selling_plan" value="" data-pct="0">
+                  <label for="sp-none-{{ section.id }}"><span class="radio"></span><span><b>One-time purchase</b><small>Buy once, no commitment.</small></span><span class="pr tnum" data-plan-price data-plan-pct="0"></span></label>
+                </div>
+              {%- endunless -%}
+            </div>
+          </fieldset>
+        {%- endif -%}
+
+        <div class="buy">
+          <div class="qty">
+            <button type="button" data-qty="-1" aria-label="Decrease quantity">−</button>
+            <input type="number" name="quantity" value="1" min="1" max="99" aria-label="Quantity" inputmode="numeric">
+            <button type="button" data-qty="1" aria-label="Increase quantity">+</button>
+          </div>
+          <button class="btn btn-ink" type="submit" data-add{% unless current.available %} disabled{% endunless %}>{% if current.available %}Add to bag{% else %}Sold out{% endif %}</button>
+        </div>
+        <p class="form-err" data-form-err role="alert"></p>
+        <p class="per" data-ship-hint></p>
+      {%- endform -%}
+
+      <div class="acc">
+        <details open><summary>Details</summary><div class="body rte">{{ product.description }}</div></details>
+        {%- if has_plans -%}
+          <details><summary>How the subscription works</summary><div class="body">{{ section.settings.sub_details | escape }}</div></details>
+        {%- endif -%}
+        <details><summary>Shipping and returns</summary><div class="body">{{ section.settings.shipping | escape }}</div></details>
+      </div>
+    </div>
+  </div>
+
+  <section class="band" style="padding-block:56px 0">
+    <div class="sec-head"><h2 style="font-size:28px">{{ section.settings.pairs_heading | escape }}</h2></div>
+    <div class="lineup">
+      {%- assign shown = 0 -%}
+      {%- for p in collections.all.products limit: 12 -%}
+        {%- if p.id != product.id and shown < 4 -%}
+          {%- assign shown = shown | plus: 1 -%}
+          {%- assign uid = section.id | append: 'r' | append: forloop.index -%}
+          {%- render 'product-card', p: p, uid: uid -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Product page",
+  "settings": [
+    { "type": "text", "id": "sub_note", "label": "Subscription line", "default": "Skip, swap flavours or cancel any time." },
+    { "type": "textarea", "id": "sub_details", "label": "Subscription details", "default": "Choose a pack and a delivery schedule. You save on every order, and you can skip a delivery, swap flavours or cancel from your account before the next ship date." },
+    { "type": "textarea", "id": "shipping", "label": "Shipping and returns", "default": "Orders ship from Ontario in 1–2 business days. Free shipping on orders over $50, otherwise a flat $6.95. If your first box is not for you, contact us within 30 days for a refund on unopened pouches." },
+    { "type": "text", "id": "pairs_heading", "label": "Related heading", "default": "Pairs well with" }
+  ]
+}
+{% endschema %}

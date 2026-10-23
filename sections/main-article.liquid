@@ -1,0 +1,8 @@
+<div class="wrap">
+  <div class="page-head"><p class="eyebrow">{{ article.published_at | date: '%B %-d, %Y' }}</p><h1>{{ article.title | escape }}</h1></div>
+  <div class="rte" style="max-width:44em;font-size:17px">{{ article.content }}</div>
+</div>
+
+{% schema %}
+{ "name": "Article", "settings": [] }
+{% endschema %}

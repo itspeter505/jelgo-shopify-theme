@@ -1,0 +1,19 @@
+<div class="wrap narrow">
+  <p><a href="{{ routes.account_url }}">Back to account</a></p>
+  <h1 style="margin-top:12px">Addresses</h1>
+  {%- for address in customer.addresses -%}
+    <div class="notice" style="margin-top:16px">{{ address | format_address }}</div>
+  {%- endfor -%}
+  <h2 style="font-size:20px;margin-top:32px">Add an address</h2>
+  {%- form 'customer_address', customer.new_address -%}
+    {{ form.errors | default_errors }}
+    <div class="field" style="margin-top:14px"><label for="a-first">First name</label><input id="a-first" type="text" name="address[first_name]" value="{{ form.first_name }}"></div>
+    <div class="field"><label for="a-last">Last name</label><input id="a-last" type="text" name="address[last_name]" value="{{ form.last_name }}"></div>
+    <div class="field"><label for="a-1">Address</label><input id="a-1" type="text" name="address[address1]" value="{{ form.address1 }}"></div>
+    <div class="field"><label for="a-city">City</label><input id="a-city" type="text" name="address[city]" value="{{ form.city }}"></div>
+    <div class="field"><label for="a-country">Country</label><input id="a-country" type="text" name="address[country]" value="{{ form.country | default: 'Canada' }}"></div>
+    <div class="field"><label for="a-prov">Province</label><input id="a-prov" type="text" name="address[province]" value="{{ form.province }}"></div>
+    <div class="field"><label for="a-zip">Postal code</label><input id="a-zip" type="text" name="address[zip]" value="{{ form.zip }}"></div>
+    <button class="btn btn-ink" type="submit">Save address</button>
+  {%- endform -%}
+</div>

@@ -1,0 +1,30 @@
+<div class="wrap">
+  <div class="page-head">
+    <h1>Search</h1>
+    <form action="{{ routes.search_url }}" method="get" role="search" style="margin-top:20px;max-width:520px;display:flex;gap:10px">
+      <label for="q" style="position:absolute;left:-999px">Search</label>
+      <input id="q" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search pouches" style="flex:1;font:inherit;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line)">
+      <button class="btn btn-ink" type="submit">Search</button>
+    </form>
+  </div>
+  {%- if search.performed -%}
+    {%- paginate search.results by 24 -%}
+      <div class="lineup">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}
+            {%- assign uid = section.id | append: 's' | append: forloop.index -%}
+            {%- render 'product-card', p: item, uid: uid -%}
+          {%- else -%}
+            <article class="card"><h3><a href="{{ item.url }}">{{ item.title | escape }}</a></h3></article>
+          {%- endif -%}
+        {%- else -%}
+          <p style="color:var(--muted)">No results for “{{ search.terms | escape }}”.</p>
+        {%- endfor -%}
+      </div>
+    {%- endpaginate -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{ "name": "Search", "settings": [] }
+{% endschema %}

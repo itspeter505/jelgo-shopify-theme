@@ -1,0 +1,18 @@
+{%- assign items = section.settings.items | split: ',' -%}
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    {%- for i in (1..2) -%}
+      {%- for item in items -%}<span>{{ item | strip | escape }}</span>{%- endfor -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Scrolling ticker",
+  "settings": [
+    { "type": "textarea", "id": "items", "label": "Items, separated by commas", "default": "No scoop, No shaker, No glass of water, Fits a laptop bag, Cold or room temp, Twist · squeeze · go" }
+  ],
+  "presets": [{ "name": "Scrolling ticker" }]
+}
+{% endschema %}

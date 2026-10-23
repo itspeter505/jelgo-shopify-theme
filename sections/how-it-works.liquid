@@ -1,0 +1,63 @@
+{%- liquid
+  assign first = collections.all.products.first
+  for p in collections.all.products limit: 24
+    unless p.tags contains 'bundle'
+      assign first = p
+      break
+    endunless
+  endfor
+-%}
+<section class="band tight" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>{{ section.settings.heading | escape }}</h2>
+      <p>{{ section.settings.intro | escape }}</p>
+    </div>
+    <div class="squeeze" data-squeeze>
+      <div class="squeeze-stick">
+        <span class="timer tnum">0.0 s</span>
+        <div class="pouch-holder">{%- if first -%}{%- render 'pouch', p: first, uid: section.id -%}{%- endif -%}</div>
+      </div>
+      <div class="steps">
+        {%- for block in section.blocks -%}
+          <article class="step" {{ block.shopify_attributes }}>
+            <span class="n">Step {{ forloop.index }} of {{ forloop.length }}</span>
+            <h3>{{ block.settings.title | escape }}</h3>
+            <p>{{ block.settings.text | escape }}</p>
+          </article>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "How it works",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Three steps, no cleanup." },
+    { "type": "text", "id": "intro", "label": "Intro", "default": "Scroll through the routine. The pouch in the panel follows along." }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Twist the cap." },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "The spout opens with a quarter turn." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "How it works",
+      "blocks": [
+        { "type": "step", "settings": { "title": "Twist the cap.", "text": "The spout opens with a quarter turn. No scoop, no measuring, no water." } },
+        { "type": "step", "settings": { "title": "Squeeze for ten seconds.", "text": "Each pouch is one serving." } },
+        { "type": "step", "settings": { "title": "Cap it and go.", "text": "Nothing to rinse." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

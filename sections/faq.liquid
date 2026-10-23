@@ -1,0 +1,30 @@
+<section class="band tight" id="faq">
+  <div class="wrap">
+    <div class="sec-head"><h2>{{ section.settings.heading | escape }}</h2></div>
+    <div class="faq">
+      {%- for block in section.blocks -%}
+        <details {{ block.shopify_attributes }}><summary>{{ block.settings.question | escape }}</summary><div class="ans">{{ block.settings.answer }}</div></details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Questions people ask first." }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "What is a vitamin jelly pouch?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>A drinkable jelly in a squeeze pouch.</p>" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "FAQ", "blocks": [{ "type": "question" }] }]
+}
+{% endschema %}

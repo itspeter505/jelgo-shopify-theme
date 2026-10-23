@@ -1,0 +1,35 @@
+<div class="wrap">
+  <div class="page-head">
+    <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    <h1>{{ section.settings.heading | escape }}</h1>
+  </div>
+  <div class="about">
+    <div class="rte">
+      {%- if page.content != blank -%}
+        {{ page.content }}
+      {%- else -%}
+        {{ section.settings.story }}
+      {%- endif -%}
+    </div>
+    <div class="about-media" aria-hidden="true">
+      {%- assign shown = 0 -%}
+      {%- for p in collections.all.products limit: 24 -%}
+        {%- if p.tags contains 'bundle' or shown >= 5 -%}{%- continue -%}{%- endif -%}
+        {%- assign shown = shown | plus: 1 -%}
+        {%- assign uid = section.id | append: 'a' | append: forloop.index -%}
+        <div class="wob">{%- render 'pouch', p: p, uid: uid -%}</div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Our story",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our story" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "We found it in a Tokyo convenience store." },
+    { "type": "richtext", "id": "story", "label": "Story (used when the page itself has no content)", "default": "<p>In Japan, vitamin jelly drinks sit in every convenience store fridge. Commuters and office workers grab one the way people here grab a coffee. <strong>In Canada, you mostly can't buy them.</strong></p><p>Meanwhile the people we know kept saying the same thing: they bought the AG1 tub, they meant to keep it up, and then a week of early meetings and a work trip broke the habit. Measuring powder and washing a shaker doesn't survive a rushed morning.</p><p>jelgo is a vitamin routine that fits in a coat pocket: one 90 g jelly pouch with 15 vitamins and minerals, in five fruit flavours, sold direct so we can keep prices fair and hear from every customer.</p>" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,12 @@
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Your bag" aria-hidden="true">
+  <div class="dr-head"><h2>Your bag</h2><button class="x" id="closeBag" type="button" aria-label="Close bag">✕</button></div>
+  <div class="freebar" id="freebar"></div>
+  <div class="dr-items" id="drItems"><div class="empty"><p>Loading your bag…</p></div></div>
+  <div class="dr-foot">
+    <div class="sum"><span>Subtotal</span><span id="drSub" class="tnum">{{ cart.total_price | money }}</span></div>
+    <small>Taxes and shipping calculated at checkout.</small>
+    <button class="btn btn-ink" id="toCheckout" type="button"{% if cart.item_count == 0 %} disabled{% endif %}>Check out</button>
+    <a href="{{ routes.cart_url }}" style="text-align:center;font-size:14px;color:var(--muted)">View full cart</a>
+  </div>
+</aside>

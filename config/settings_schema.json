@@ -1,0 +1,32 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "jelgo",
+    "theme_version": "1.0.0",
+    "theme_author": "BAMFP",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/manual/online-store/themes"
+  },
+  {
+    "name": "Store",
+    "settings": [
+      {
+        "type": "color",
+        "id": "accent",
+        "label": "Default accent colour",
+        "default": "#F28C1E"
+      },
+      {
+        "type": "range",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "min": 0,
+        "max": 200,
+        "step": 5,
+        "unit": "$",
+        "default": 50,
+        "info": "Shown in the bag. Set the actual free-shipping rule in Settings > Shipping."
+      }
+    ]
+  }
+]

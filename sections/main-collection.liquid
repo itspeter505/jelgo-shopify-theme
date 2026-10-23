@@ -1,0 +1,61 @@
+{%- liquid
+  assign goals = ''
+  for p in collection.products
+    for tag in p.tags
+      if tag contains 'goal:'
+        assign g = tag | remove: 'goal:' | strip
+        unless goals contains g
+          assign goals = goals | append: g | append: '||'
+        endunless
+      endif
+    endfor
+  endfor
+  assign goal_list = goals | split: '||'
+  assign grid_id = 'grid-' | append: section.id
+-%}
+<div class="wrap">
+  <div class="page-head">
+    <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    <h1>{% if collection.handle == 'all' %}{{ section.settings.all_title | escape }}{% else %}{{ collection.title | escape }}{% endif %}</h1>
+    {%- if collection.description != blank -%}
+      <div class="rte" style="color:var(--muted);margin-top:14px;max-width:36em;font-size:18px">{{ collection.description }}</div>
+    {%- elsif section.settings.intro != blank -%}
+      <p>{{ section.settings.intro | escape }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- paginate collection.products by 24 -%}
+    {%- if goal_list.size > 1 -%}
+      <div class="filters" role="group" aria-label="Filter by goal" data-filters="{{ grid_id }}">
+        <button class="chip" type="button" data-f="all" aria-pressed="true">All</button>
+        {%- for g in goal_list -%}{%- if g != blank -%}<button class="chip" type="button" data-f="{{ g | handle }}" aria-pressed="false">{{ g | escape }}</button>{%- endif -%}{%- endfor -%}
+      </div>
+    {%- endif -%}
+    <div class="lineup" id="{{ grid_id }}">
+      {%- for p in collection.products -%}
+        {%- assign uid = section.id | append: 'g' | append: forloop.index -%}
+        {%- render 'product-card', p: p, uid: uid -%}
+      {%- else -%}
+        <p style="color:var(--muted)">No products here yet.</p>
+      {%- endfor -%}
+    </div>
+    {%- if paginate.pages > 1 -%}
+      <nav class="pager" aria-label="Pages">
+        {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}">Previous</a>{%- endif -%}
+        <span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+        {%- if paginate.next -%}<a href="{{ paginate.next.url }}">Next</a>{%- endif -%}
+      </nav>
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{
+  "name": "Collection page",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The lineup" },
+    { "type": "text", "id": "all_title", "label": "Title on the all-products page", "default": "Shop all pouches" },
+    { "type": "textarea", "id": "intro", "label": "Intro", "default": "Every flavour has the same daily formula: 15 vitamins and minerals in one 90 g pouch. Pick a favourite, or start with the Discovery Box." }
+  ]
+}
+{% endschema %}

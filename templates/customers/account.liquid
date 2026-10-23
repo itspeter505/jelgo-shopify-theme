@@ -1,0 +1,21 @@
+<div class="wrap" style="padding-block:56px">
+  <h1>Your account</h1>
+  <p style="margin-top:12px;color:var(--muted)">{{ customer.email | escape }} · <a href="{{ routes.account_logout_url }}">Sign out</a> · <a href="{{ routes.account_addresses_url }}">Addresses</a></p>
+  <h2 style="font-size:22px;margin-top:36px">Orders</h2>
+  {%- paginate customer.orders by 20 -%}
+    {%- if customer.orders.size > 0 -%}
+      <div class="table-scroll" style="margin-top:12px">
+        <table class="cart-table">
+          <thead><tr><th>Order</th><th>Date</th><th>Status</th><th style="text-align:right">Total</th></tr></thead>
+          <tbody>
+            {%- for order in customer.orders -%}
+              <tr><td><a href="{{ order.customer_url }}">{{ order.name }}</a></td><td>{{ order.created_at | date: '%b %-d, %Y' }}</td><td>{{ order.financial_status_label }}</td><td style="text-align:right" class="tnum">{{ order.total_price | money }}</td></tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+    {%- else -%}
+      <p style="margin-top:12px;color:var(--muted)">No orders yet.</p>
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>

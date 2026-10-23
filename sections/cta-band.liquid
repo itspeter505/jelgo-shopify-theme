@@ -1,0 +1,31 @@
+{%- liquid
+  assign target = all_products[section.settings.product_handle]
+  assign link = routes.all_products_collection_url
+  if target != empty and target.id
+    assign link = target.url
+  endif
+-%}
+<section>
+  <div class="wrap">
+    <div class="cta-band">
+      <div>
+        <h2>{{ section.settings.heading | escape }}</h2>
+        <p>{{ section.settings.text | escape }}</p>
+      </div>
+      <div><a class="btn" href="{{ link }}">{{ section.settings.button | escape }}{% if target != empty and target.id %} · {{ target.price | money }}{% endif %}</a></div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Call to action",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Start with a discovery box." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Ten pouches, two of every flavour, so you find your favourite before you subscribe." },
+    { "type": "text", "id": "button", "label": "Button", "default": "Try all five" },
+    { "type": "text", "id": "product_handle", "label": "Product handle to link", "default": "discovery-box" }
+  ],
+  "presets": [{ "name": "Call to action" }]
+}
+{% endschema %}

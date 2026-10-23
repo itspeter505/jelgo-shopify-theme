@@ -1,0 +1,43 @@
+{%- comment -%} Params: p (product), uid (string) {%- endcomment -%}
+{%- liquid
+  assign pc = 'F5B21C'
+  assign pf = ''
+  assign goal = ''
+  assign has_pouch = false
+  assign is_bundle = false
+  if p.tags contains 'bundle'
+    assign is_bundle = true
+  endif
+  for tag in p.tags
+    if tag contains 'pouch:'
+      assign pc = tag | remove: 'pouch:' | strip
+      assign has_pouch = true
+    elsif tag contains 'flavour:'
+      assign pf = tag | remove: 'flavour:' | strip
+    elsif tag contains 'goal:'
+      assign goal = tag | remove: 'goal:' | strip
+    endif
+  endfor
+  assign c = pc | prepend: '#'
+  assign v = p.selected_or_first_available_variant
+-%}
+<article class="card" data-goal="{{ goal | handle | default: 'other' }}">
+  <div class="pic{% if p.featured_image and is_bundle %} full{% endif %}" style="background:color-mix(in oklab, {{ c }} 20%, #fff)">
+    {%- render 'pouch', p: p, uid: uid -%}
+  </div>
+  {%- if goal != blank -%}<span class="goal">{{ goal | escape }}</span>{%- endif -%}
+  <h3><a href="{{ p.url }}">{{ p.title | escape }}</a></h3>
+  {%- if pf != blank -%}<span class="flav">{{ pf | escape }}</span>{%- endif -%}
+  <div class="row">
+    <span class="price tnum">
+      {%- if p.price_varies -%}From {{ p.price_min | money }}{%- else -%}{{ p.price | money }}{%- endif -%}
+    </span>
+    {%- if p.available and p.requires_selling_plan == false -%}
+      <form action="{{ routes.cart_add_url }}" method="post" data-ajax-add>
+        <input type="hidden" name="id" value="{{ v.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <button class="add" type="submit" aria-label="Add {{ p.title | escape }}{% if v.title != 'Default Title' %}, {{ v.title | escape }}{% endif %} to bag">+</button>
+      </form>
+    {%- endif -%}
+  </div>
+</article>

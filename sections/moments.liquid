@@ -1,0 +1,48 @@
+<section class="band tight">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>{{ section.settings.heading | escape }}</h2>
+      <p>{{ section.settings.intro | escape }}</p>
+    </div>
+    <div class="moments" tabindex="0" aria-label="Moments in a day">
+      {%- for block in section.blocks -%}
+        <article class="moment" style="background:color-mix(in oklab, {{ block.settings.color }} 42%, #ffffff)" {{ block.shopify_attributes }}>
+          <span class="t">{{ block.settings.time | escape }}</span>
+          <div><h3>{{ block.settings.title | escape }}</h3><p>{{ block.settings.text | escape }}</p></div>
+          <span class="pk">{{ block.settings.pick | escape }}</span>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Moments in a day",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Built for the days your routine falls apart." },
+    { "type": "text", "id": "intro", "label": "Intro", "default": "Swipe through a typical week." }
+  ],
+  "blocks": [
+    {
+      "type": "moment",
+      "name": "Moment",
+      "settings": [
+        { "type": "text", "id": "time", "label": "Time", "default": "7:10 am" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Out the door" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Today's pouch on the walk to the train." },
+        { "type": "text", "id": "pick", "label": "Pouch", "default": "Orange Mango" },
+        { "type": "color", "id": "color", "label": "Colour", "default": "#F28C1E" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Moments in a day",
+      "blocks": [
+        { "type": "moment" }
+      ]
+    }
+  ]
+}
+{% endschema %}

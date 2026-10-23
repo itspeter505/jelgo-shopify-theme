@@ -1,0 +1,39 @@
+{%- assign story = pages[section.settings.story_page] -%}
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="{{ routes.root_url }}" style="font-size:22px"><span>{{ shop.name | downcase | escape }}</span><i></i></a>
+        <p style="margin-top:12px;max-width:28em">{{ section.settings.blurb | escape }}</p>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <a href="{{ routes.all_products_collection_url }}">All pouches</a>
+        {%- if section.settings.box_handle != blank -%}
+          {%- assign box = all_products[section.settings.box_handle] -%}
+          {%- if box != empty and box.id -%}<a href="{{ box.url }}">{{ box.title | escape }}</a>{%- endif -%}
+        {%- endif -%}
+        <a href="{{ routes.cart_url }}">Your bag</a>
+      </div>
+      <div>
+        <h4>Learn</h4>
+        <a href="{{ routes.root_url }}#how">How it works</a>
+        {%- if story != empty and story != blank -%}<a href="{{ story.url }}">Our story</a>{%- endif -%}
+        <a href="{{ routes.root_url }}#faq">FAQ</a>
+      </div>
+    </div>
+    <p class="disclaim">{{ section.settings.disclaimer | escape }}</p>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "textarea", "id": "blurb", "label": "Short description", "default": "Daily vitamin jelly for people whose supplement routine falls apart on busy mornings and work trips. 15 vitamins and minerals, five flavours, shipped across Canada." },
+    { "type": "text", "id": "story_page", "label": "Our story page handle", "default": "our-story" },
+    { "type": "text", "id": "box_handle", "label": "Discovery box product handle", "default": "discovery-box" },
+    { "type": "textarea", "id": "disclaimer", "label": "Disclaimer", "default": "Concept store built for Business 4572 (Online Retailing) at Ivey Business School. Checkout runs in test mode: no card is charged and no orders ship. Formulations and nutrition values are planning targets and have not been reviewed by Health Canada. Not intended to diagnose, treat, cure or prevent any disease." }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,9 @@
+<div class="wrap narrow">
+  <h1>Activate your account</h1>
+  {%- form 'activate_customer_password' -%}
+    {{ form.errors | default_errors }}
+    <div class="field" style="margin-top:24px"><label for="act-pw">Password</label><input id="act-pw" type="password" name="customer[password]" autocomplete="new-password" required></div>
+    <div class="field"><label for="act-pw2">Confirm password</label><input id="act-pw2" type="password" name="customer[password_confirmation]" autocomplete="new-password" required></div>
+    <button class="btn btn-ink" type="submit" style="width:100%">Activate</button>
+  {%- endform -%}
+</div>

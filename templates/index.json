@@ -1,0 +1,221 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "blocks": {
+        "f1": {
+          "type": "fact",
+          "settings": {
+            "value": "15",
+            "label": "vitamins & minerals"
+          }
+        },
+        "f2": {
+          "type": "fact",
+          "settings": {
+            "value": "10 s",
+            "label": "to finish a pouch"
+          }
+        },
+        "f3": {
+          "type": "fact",
+          "settings": {
+            "value": "0",
+            "label": "shakers to wash"
+          }
+        }
+      },
+      "block_order": [
+        "f1",
+        "f2",
+        "f3"
+      ],
+      "settings": {}
+    },
+    "ticker": {
+      "type": "marquee",
+      "settings": {}
+    },
+    "compare": {
+      "type": "compare",
+      "settings": {}
+    },
+    "how": {
+      "type": "how-it-works",
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "title": "Twist the cap.",
+            "text": "The spout opens with a quarter turn. No scoop, no measuring, no water. Keep a few in the office fridge if you like it cold."
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "title": "Squeeze for ten seconds.",
+            "text": "Each pouch is one full serving as a smooth, fruit-flavoured jelly. Have it at your desk, on the platform or at the airport gate."
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "title": "Cap it and go.",
+            "text": "Nothing to rinse and nothing to carry home. Re-cap the empty pouch and drop it in the bin."
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "settings": {}
+    },
+    "lineup": {
+      "type": "lineup",
+      "settings": {}
+    },
+    "moments": {
+      "type": "moments",
+      "blocks": {
+        "m1": {
+          "type": "moment",
+          "settings": {
+            "time": "6:50 am",
+            "title": "Out the door",
+            "text": "Today's pouch on the walk to the train, because breakfast didn't happen.",
+            "pick": "Orange Mango",
+            "color": "#F28C1E"
+          }
+        },
+        "m2": {
+          "type": "moment",
+          "settings": {
+            "time": "10:30 am",
+            "title": "Back-to-back meetings",
+            "text": "Keep a box in your desk drawer and have one between calls.",
+            "pick": "Green Apple Lime",
+            "color": "#8DC63F"
+          }
+        },
+        "m3": {
+          "type": "moment",
+          "settings": {
+            "time": "Tuesday",
+            "title": "Work trip",
+            "text": "A week of pouches fits in a carry-on. No powder at airport security.",
+            "pick": "Raspberry Grapefruit",
+            "color": "#E8505B"
+          }
+        },
+        "m4": {
+          "type": "moment",
+          "settings": {
+            "time": "6:15 pm",
+            "title": "Gym before dinner",
+            "text": "Forgot this morning? It's already in your gym bag.",
+            "pick": "Grape Raspberry",
+            "color": "#A23FC2"
+          }
+        },
+        "m5": {
+          "type": "moment",
+          "settings": {
+            "time": "Saturday",
+            "title": "Errands and brunch",
+            "text": "Weekends break routines too. One in your jacket pocket keeps it going.",
+            "pick": "Blueberry Peach",
+            "color": "#7366DE"
+          }
+        }
+      },
+      "block_order": [
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5"
+      ],
+      "settings": {}
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "What is jelgo?",
+            "answer": "<p>A daily vitamin jelly: one 90 g squeeze pouch with 15 vitamins and minerals. The format is everyday in Japanese convenience stores, where office workers grab one instead of a bar or a shake.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "How is it different from AG1 or IM8?",
+            "answer": "<p>Greens powders pack more ingredients into one scoop, and they work well if you have time to mix them. jelgo carries 15 vitamins and minerals and needs no water, no shaker and no cleanup, so the routine survives early meetings and travel.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Are the flavours different formulas?",
+            "answer": "<p>No. All five flavours have the same 15 vitamins and minerals. Pick by taste, or rotate with the Discovery Box or the 30-Day Variety Box.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "How many should I have a day?",
+            "answer": "<p>One pouch a day. A 30-pack is one month.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "Does it need the fridge?",
+            "answer": "<p>No. Pouches are shelf-stable until opened and fine at room temperature. Chilled is our favourite.</p>"
+          }
+        },
+        "q6": {
+          "type": "question",
+          "settings": {
+            "question": "How does the subscription work?",
+            "answer": "<p>Choose a 30-pack or the Variety Box, delivered every 30 days, and save 20% on every order. Skip, swap flavours or cancel from your account before the next ship date.</p>"
+          }
+        },
+        "q7": {
+          "type": "question",
+          "settings": {
+            "question": "Is this store taking real orders?",
+            "answer": "<p>Not yet. jelgo is a class project for Business 4572 at Ivey Business School, and checkout runs in test mode: no card is charged and nothing ships.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7"
+      ],
+      "settings": {}
+    },
+    "cta": {
+      "type": "cta-band",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "ticker",
+    "compare",
+    "how",
+    "lineup",
+    "moments",
+    "faq",
+    "cta"
+  ]
+}

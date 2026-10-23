@@ -1,0 +1,119 @@
+{%- liquid
+  assign src = section.settings.collection
+  if src == blank
+    assign src = collections.all
+  endif
+  assign count = 0
+-%}
+<div class="hero" data-hero data-interval="{{ section.settings.interval | times: 1000 }}">
+  <div class="wrap hero-grid">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h1>{{ section.settings.heading_start | escape }} <em>{{ section.settings.heading_highlight | escape }}</em> {{ section.settings.heading_end | escape }}</h1>
+      {%- if section.settings.lede != blank -%}<p class="lede">{{ section.settings.lede | escape }}</p>{%- endif -%}
+      <div class="hero-cta">
+        <a class="btn btn-ink" href="{{ routes.all_products_collection_url }}">{{ section.settings.button_primary | escape }}</a>
+        <a class="btn btn-ghost" href="#how">{{ section.settings.button_secondary | escape }}</a>
+      </div>
+      <div class="hero-facts">
+        {%- for block in section.blocks -%}
+          <div {{ block.shopify_attributes }}><b class="tnum">{{ block.settings.value | escape }}</b><span>{{ block.settings.label | escape }}</span></div>
+        {%- endfor -%}
+      </div>
+    </div>
+    <div>
+      <div class="stage" aria-roledescription="carousel" aria-label="Flavours">
+        <div class="blob" aria-hidden="true"></div>
+        {%- for p in src.products limit: 24 -%}
+          {%- if p.tags contains 'bundle' or count >= 6 -%}{%- continue -%}{%- endif -%}
+          {%- liquid
+            assign pc = settings.accent
+            assign pf = ''
+            assign goal = ''
+            for tag in p.tags
+              if tag contains 'pouch:'
+                assign pc = tag | remove: 'pouch:' | strip | prepend: '#'
+              elsif tag contains 'flavour:'
+                assign pf = tag | remove: 'flavour:' | strip
+              elsif tag contains 'goal:'
+                assign goal = tag | remove: 'goal:' | strip
+              endif
+            endfor
+            assign desc = pf
+            assign count = count | plus: 1
+            assign uid = section.id | append: 'h' | append: forloop.index
+          -%}
+          <div class="slide wob" data-pos="{% if forloop.first %}0{% else %}hide{% endif %}" data-color="{{ pc }}" data-name="{{ p.title | escape }}" data-flav="{{ desc | escape }}" data-url="{{ p.url }}" role="group" aria-roledescription="slide" aria-label="{{ p.title | escape }}">
+            {%- render 'pouch', p: p, uid: uid -%}
+          </div>
+        {%- endfor -%}
+        {%- if count == 0 -%}
+          <p style="position:absolute;inset:40% 10% auto;text-align:center;color:var(--muted)">Add products to your store and they appear here.</p>
+        {%- else -%}
+          {%- liquid
+            assign first = src.products.first
+            for p in src.products limit: 24
+              unless p.tags contains 'bundle'
+                assign first = p
+                break
+              endunless
+            endfor
+          -%}
+          <div class="stage-tag" aria-live="polite">
+            <span class="sw" aria-hidden="true"></span>
+            <div><b data-tag-name>{{ first.title | escape }}</b> <span data-tag-flav></span></div>
+            <a data-tag-link href="{{ first.url }}">View</a>
+          </div>
+        {%- endif -%}
+      </div>
+      {%- if count > 1 -%}
+        <div class="dots" role="tablist" aria-label="Choose a flavour">
+          {%- assign shown = 0 -%}
+          {%- for p in src.products limit: 24 -%}
+            {%- if p.tags contains 'bundle' or shown >= 6 -%}{%- continue -%}{%- endif -%}
+            {%- assign shown = shown | plus: 1 -%}
+            <button class="dot" type="button" role="tab" aria-label="Show {{ p.title | escape }}" style="--dur:{{ section.settings.interval | times: 1000 }}ms"><span></span></button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Pouch hero",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Products to rotate", "info": "Leave empty to use all products." },
+    { "type": "range", "id": "interval", "label": "Seconds per slide", "min": 2, "max": 10, "step": 1, "unit": "s", "default": 4 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Daily vitamin jelly · 15 vitamins & minerals" },
+    { "type": "text", "id": "heading_start", "label": "Heading start", "default": "Your vitamins, in" },
+    { "type": "text", "id": "heading_highlight", "label": "Heading highlight", "default": "ten seconds" },
+    { "type": "text", "id": "heading_end", "label": "Heading end", "default": "flat." },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "One 90 g pouch, 15 vitamins and minerals, five fruit flavours. No scoop, no shaker, no glass of water, so your routine survives the commute, the office and the hotel room." },
+    { "type": "text", "id": "button_primary", "label": "Main button", "default": "Shop the lineup" },
+    { "type": "text", "id": "button_secondary", "label": "Second button", "default": "See how it works" }
+  ],
+  "blocks": [
+    {
+      "type": "fact",
+      "name": "Fact",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value", "default": "10 s" },
+        { "type": "text", "id": "label", "label": "Label", "default": "to finish a pouch" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pouch hero",
+      "blocks": [
+        { "type": "fact", "settings": { "value": "10 s", "label": "to finish a pouch" } },
+        { "type": "fact", "settings": { "value": "0", "label": "shakers to wash" } },
+        { "type": "fact", "settings": { "value": "1", "label": "pouch a day" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,16 @@
+<div class="wrap" style="padding-block:56px">
+  <p><a href="{{ routes.account_url }}">Back to account</a></p>
+  <h1 style="margin-top:12px">Order {{ order.name }}</h1>
+  <p style="margin-top:8px;color:var(--muted)">{{ order.created_at | date: '%B %-d, %Y' }} · {{ order.financial_status_label }}</p>
+  <div class="table-scroll" style="margin-top:20px">
+    <table class="cart-table">
+      <thead><tr><th>Product</th><th>Qty</th><th style="text-align:right">Total</th></tr></thead>
+      <tbody>
+        {%- for line in order.line_items -%}
+          <tr><td>{{ line.title | escape }}</td><td>{{ line.quantity }}</td><td style="text-align:right" class="tnum">{{ line.final_line_price | money }}</td></tr>
+        {%- endfor -%}
+      </tbody>
+    </table>
+  </div>
+  <p style="text-align:right;margin-top:16px;font-weight:700">Total {{ order.total_price | money }}</p>
+</div>

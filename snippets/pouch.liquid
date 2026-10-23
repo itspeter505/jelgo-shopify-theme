@@ -1,0 +1,60 @@
+{%- comment -%}
+  Shows the product photo; falls back to a drawn pouch when there is no image.
+  Params: p (product), uid (unique string for gradient ids), prefer_image (boolean, optional)
+  Product tags read: pouch:HEX (no #), flavour:Name, label:Short label
+  If the product has no pouch: tag but has an image, the image is shown instead.
+{%- endcomment -%}
+{%- liquid
+  assign has_pouch = false
+  assign pc = 'F5B21C'
+  assign pf = ''
+  assign plabel = p.title
+  for tag in p.tags
+    if tag contains 'pouch:'
+      assign pc = tag | remove: 'pouch:' | strip
+      assign has_pouch = true
+    elsif tag contains 'flavour:'
+      assign pf = tag | remove: 'flavour:' | strip
+    elsif tag contains 'label:'
+      assign plabel = tag | remove: 'label:' | strip
+    endif
+  endfor
+  assign show_image = false
+  if p.featured_image
+    assign show_image = true
+  endif
+  assign c = pc | prepend: '#'
+  assign d = c | color_darken: 14
+  assign l = c | color_lighten: 20
+  assign label_size = 16
+  if plabel.size > 7
+    assign label_size = 13
+  endif
+  assign gid = 'g' | append: uid | handle
+-%}
+{%- if show_image -%}
+  {{ p.featured_image | image_url: width: 800 | image_tag: class: 'media-img', loading: 'lazy', alt: p.featured_image.alt | default: p.title, widths: '300, 500, 800' }}
+{%- else -%}
+<svg class="pouch" viewBox="0 0 200 300" role="img" aria-label="{{ p.title | escape }} pouch">
+  <defs>
+    <linearGradient id="{{ gid }}b" x1="0" x2="1"><stop offset="0" stop-color="{{ d }}"/><stop offset=".35" stop-color="{{ c }}"/><stop offset=".7" stop-color="{{ c }}"/><stop offset="1" stop-color="{{ d }}"/></linearGradient>
+    <linearGradient id="{{ gid }}s" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  </defs>
+  <g class="pouch-anim">
+    <ellipse cx="100" cy="292" rx="62" ry="6" fill="#000" opacity=".12"/>
+    <rect x="80" y="2" width="40" height="34" rx="7" fill="#EDEEF4" stroke="#C9CBD6" stroke-width="1.5"/>
+    <g stroke="#C9CBD6" stroke-width="1.4"><line x1="88" y1="8" x2="88" y2="30"/><line x1="96" y1="8" x2="96" y2="30"/><line x1="104" y1="8" x2="104" y2="30"/><line x1="112" y1="8" x2="112" y2="30"/></g>
+    <rect x="86" y="34" width="28" height="16" rx="3" fill="#F7F7FA" stroke="#C9CBD6" stroke-width="1.5"/>
+    <path d="M44 62 Q44 48 60 48 L140 48 Q156 48 156 62 L166 266 Q167 286 146 286 L54 286 Q33 286 34 266 Z" fill="url(#{{ gid }}b)"/>
+    <path d="M44 62 Q44 48 60 48 L140 48 Q156 48 156 62 L157 76 L43 76 Z" fill="#fff" opacity=".22"/>
+    <rect x="56" y="104" width="88" height="120" rx="16" fill="#fff" opacity=".95"/>
+    <text x="100" y="134" text-anchor="middle" class="lbl" font-size="20" font-weight="800" fill="#15172A" letter-spacing="-0.5">{{ shop.name | downcase | truncate: 8, '' | escape }}</text>
+    <rect x="76" y="144" width="48" height="3" rx="1.5" fill="{{ c }}"/>
+    <text x="100" y="172" text-anchor="middle" class="lbl" font-size="{{ label_size }}" font-weight="700" fill="{{ d }}">{{ plabel | truncate: 11, '' | escape }}</text>
+    <text x="100" y="194" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#5A5E77">90 G · 1 SERVING</text>
+    <text x="100" y="208" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8.5" fill="#5A5E77">{{ pf | upcase | truncate: 18, '' | escape }}</text>
+    <circle cx="100" cy="252" r="10" fill="{{ l }}" opacity=".9"/>
+    <path d="M58 60 Q54 160 62 270" stroke="url(#{{ gid }}s)" stroke-width="10" fill="none" stroke-linecap="round" opacity=".7"/>
+  </g>
+</svg>
+{%- endif -%}
