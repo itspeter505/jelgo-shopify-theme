@@ -1,10 +1,11 @@
-<section class="band tight">
+<section class="band tight mo-pin" data-mo-pin>
+  <div class="mo-sticky">
   <div class="wrap">
     <div class="sec-head">
       <h2>{{ section.settings.heading | escape }}</h2>
       <p>{{ section.settings.intro | escape }}</p>
     </div>
-    <div class="moments" tabindex="0" aria-label="Moments in a day">
+    <div class="moments" tabindex="0" aria-label="Moments in a day" data-mo-track>
       {%- for block in section.blocks -%}
         <article class="moment" style="background:color-mix(in oklab, {{ block.settings.color }} 42%, #ffffff)" {{ block.shopify_attributes }}>
           <span class="t">{{ block.settings.time | escape }}</span>
@@ -13,6 +14,8 @@
         </article>
       {%- endfor -%}
     </div>
+    <div class="mo-progress" aria-hidden="true"><i data-mo-bar></i></div>
+  </div>
   </div>
 </section>
 

@@ -19,7 +19,7 @@
             <button type="button" class="in-flip" aria-expanded="false" data-flip aria-label="{{ block.settings.name | escape }}: show more">
               <span class="in-face in-front">
                 <span class="in-top"><b>{{ block.settings.name | escape }}</b><span class="tnum">{{ block.settings.amount | escape }}</span></span>
-                <span class="in-bar" role="img" aria-label="{{ dv }}% of the daily value"><i style="width:{{ bar }}%"></i></span>
+                <span class="in-bar" role="img" aria-label="{{ dv }}% of the daily value"><i style="width:{{ bar }}%;--w:{{ bar }}%"></i></span>
                 <span class="in-dv tnum">{{ dv }}% DV</span>
                 <span class="in-role">{{ block.settings.role | escape }}</span>
                 <span class="in-more" aria-hidden="true">More <i>+</i></span>
