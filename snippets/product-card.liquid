@@ -20,6 +20,12 @@
   endfor
   assign c = pc | prepend: '#'
   assign v = p.selected_or_first_available_variant
+  assign tag_pack = 0
+  for tag in p.tags
+    if tag contains 'pouches:'
+      assign tag_pack = tag | remove: 'pouches:' | strip | plus: 0
+    endif
+  endfor
 -%}
 <article class="card" data-goal="{{ goal | handle | default: 'other' }}">
   <div class="pic{% if p.featured_image and is_bundle %} full{% endif %}" style="background:color-mix(in oklab, {{ c }} 20%, #fff)">
@@ -30,7 +36,19 @@
   {%- if pf != blank -%}<span class="flav">{{ pf | escape }}</span>{%- endif -%}
   <div class="row">
     <span class="price tnum">
-      {%- if p.price_varies -%}From {{ p.price_min | money }}{%- else -%}{{ p.price | money }}{%- endif -%}
+      {%- for variant in p.variants limit: 2 -%}
+        {%- liquid
+          assign n = variant.title | remove: ' pouches' | remove: '-pack' | strip | plus: 0
+          if n == 0
+            assign n = tag_pack
+          endif
+        -%}
+        {%- if forloop.first -%}
+          <b>{{ variant.price | money }}</b>{% if n > 0 %} <span class="pack">for {{ n }} pouches</span>{% endif %}
+        {%- else -%}
+          <small>or {{ variant.price | money }} for {{ n }}</small>
+        {%- endif -%}
+      {%- endfor -%}
     </span>
     {%- if p.available and p.requires_selling_plan == false -%}
       <form action="{{ routes.cart_add_url }}" method="post" data-ajax-add>

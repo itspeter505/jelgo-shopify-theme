@@ -18,7 +18,7 @@
       </div>
       <div>
         <h4>Learn</h4>
-        <a href="{{ routes.root_url }}#how">How it works</a>
+        <a href="{{ routes.root_url }}#inside">What's inside</a>
         {%- if story != empty and story != blank -%}<a href="{{ story.url }}">Our story</a>{%- endif -%}
         {%- if creators != empty and creators != blank -%}<a href="{{ creators.url }}">{{ section.settings.creators_label | default: "Reviews" | escape }}</a>{%- endif -%}
         <a href="{{ routes.root_url }}#faq">FAQ</a>

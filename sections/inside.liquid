@@ -1,0 +1,70 @@
+<section class="band" id="inside">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>{{ section.settings.heading | escape }}</h2>
+      <p>{{ section.settings.intro | escape }}</p>
+    </div>
+    <div class="in-wrap">
+      <div class="in-grid">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign dv = block.settings.dv
+            if dv > 100
+              assign bar = 100
+            else
+              assign bar = dv
+            endif
+          -%}
+          <article class="in-card" {{ block.shopify_attributes }}>
+            <div class="in-top"><b>{{ block.settings.name | escape }}</b><span class="tnum">{{ block.settings.amount | escape }}</span></div>
+            <div class="in-bar" role="img" aria-label="{{ dv }}% of the daily value"><i style="width:{{ bar }}%"></i></div>
+            <div class="in-dv tnum">{{ dv }}% DV</div>
+            <p>{{ block.settings.role | escape }}</p>
+          </article>
+        {%- endfor -%}
+      </div>
+      <aside class="in-side">
+        <h3>{{ section.settings.side_heading | escape }}</h3>
+        <ul class="jg-facts">
+          {%- if section.settings.fact1 != blank -%}<li>{{ section.settings.fact1 | escape }}</li>{%- endif -%}
+          {%- if section.settings.fact2 != blank -%}<li>{{ section.settings.fact2 | escape }}</li>{%- endif -%}
+          {%- if section.settings.fact3 != blank -%}<li>{{ section.settings.fact3 | escape }}</li>{%- endif -%}
+          {%- if section.settings.fact4 != blank -%}<li>{{ section.settings.fact4 | escape }}</li>{%- endif -%}
+          {%- if section.settings.fact5 != blank -%}<li>{{ section.settings.fact5 | escape }}</li>{%- endif -%}
+        </ul>
+        <a class="btn btn-ink" href="{{ routes.all_products_collection_url }}" style="margin-top:20px">Pick a flavour</a>
+      </aside>
+    </div>
+    <p class="honest">{{ section.settings.note | escape }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "What's inside",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "15 vitamins and minerals in every pouch." },
+    { "type": "textarea", "id": "intro", "label": "Intro", "default": "Built around Canadian daily values for adults. Here is what each pouch carries and what each nutrient does." },
+    { "type": "text", "id": "side_heading", "label": "Side heading", "default": "Also in every pouch" },
+    { "type": "text", "id": "fact1", "label": "Fact 1", "default": "Made with real fruit juice and fruit purée" },
+    { "type": "text", "id": "fact2", "label": "Fact 2", "default": "No added sugar: sweetened with fruit and erythritol" },
+    { "type": "text", "id": "fact3", "label": "Fact 3", "default": "Vegan: set with plant-based gellan, no gelatin" },
+    { "type": "text", "id": "fact4", "label": "Fact 4", "default": "35 kcal per 90 g pouch" },
+    { "type": "text", "id": "fact5", "label": "Fact 5", "default": "Made for adults 18+. Not for children." },
+    { "type": "textarea", "id": "note", "label": "Note", "default": "Amounts are planning targets for this concept product and have not been reviewed by Health Canada. % DV is approximate, based on Canadian daily values for adults. Not intended to diagnose, treat, cure or prevent any disease." }
+  ],
+  "blocks": [
+    {
+      "type": "nutrient",
+      "name": "Nutrient",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Vitamin C" },
+        { "type": "text", "id": "amount", "label": "Amount", "default": "90 mg" },
+        { "type": "range", "id": "dv", "label": "% daily value", "min": 0, "max": 100, "step": 1, "default": 100 },
+        { "type": "text", "id": "role", "label": "What it does", "default": "An antioxidant that helps form collagen." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "What's inside" }]
+}
+{% endschema %}

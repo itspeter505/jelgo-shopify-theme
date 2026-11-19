@@ -378,4 +378,11 @@
       if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
     });
   });
+
+  /* ---------- copy buttons on the test-card note ---------- */
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-copy]'); if (!b) return;
+    var done = function () { var o = b.textContent; b.textContent = 'Copied'; setTimeout(function () { b.textContent = o; }, 1500); };
+    if (navigator.clipboard) navigator.clipboard.writeText(b.dataset.copy).then(done, done); else done();
+  });
 })();

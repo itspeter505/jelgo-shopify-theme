@@ -8,7 +8,7 @@
       <a class="logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home"><span>{{ shop.name | downcase | escape }}</span><i></i></a>
       <nav class="nav-links" aria-label="Main">
         <a href="{{ routes.all_products_collection_url }}"{% if template.name == 'collection' %} aria-current="page"{% endif %}>Shop</a>
-        <a href="{{ routes.root_url }}#how">How it works</a>
+        <a href="{{ routes.root_url }}#inside">What's inside</a>
         {%- if story != empty and story != blank -%}<a href="{{ story.url }}"{% if page.handle == story.handle %} aria-current="page"{% endif %}>Our story</a>{%- endif -%}
         {%- if creators != empty and creators != blank -%}<a href="{{ creators.url }}"{% if page.handle == creators.handle %} aria-current="page"{% endif %}>{{ section.settings.creators_label | default: "Reviews" | escape }}</a>{%- endif -%}
         <a href="{{ routes.root_url }}#faq">FAQ</a>
@@ -24,7 +24,7 @@
     </div>
     <nav class="mnav" aria-label="Main mobile">
       <a href="{{ routes.all_products_collection_url }}">Shop</a>
-      <a href="{{ routes.root_url }}#how">How it works</a>
+      <a href="{{ routes.root_url }}#inside">What's inside</a>
       {%- if story != empty and story != blank -%}<a href="{{ story.url }}">Our story</a>{%- endif -%}
       {%- if creators != empty and creators != blank -%}<a href="{{ creators.url }}">{{ section.settings.creators_label | default: "Reviews" | escape }}</a>{%- endif -%}
       <a href="{{ routes.root_url }}#faq">FAQ</a>

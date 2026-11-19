@@ -2,35 +2,12 @@
   "sections": {
     "hero": {
       "type": "hero",
-      "blocks": {
-        "f1": {
-          "type": "fact",
-          "settings": {
-            "value": "15",
-            "label": "vitamins & minerals"
-          }
-        },
-        "f2": {
-          "type": "fact",
-          "settings": {
-            "value": "10 s",
-            "label": "to finish a pouch"
-          }
-        },
-        "f3": {
-          "type": "fact",
-          "settings": {
-            "value": "0",
-            "label": "shakers to wash"
-          }
-        }
-      },
-      "block_order": [
-        "f1",
-        "f2",
-        "f3"
-      ],
-      "settings": {}
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "lede": "A daily vitamin jelly for busy adults: one 90 g pouch with 15 vitamins and minerals, made with real fruit. No pills to swallow, no powder to mix.",
+        "button_secondary": "See what's inside"
+      }
     },
     "ticker": {
       "type": "marquee",
@@ -70,7 +47,8 @@
         "s2",
         "s3"
       ],
-      "settings": {}
+      "settings": {},
+      "disabled": true
     },
     "lineup": {
       "type": "lineup",
@@ -93,8 +71,8 @@
           "type": "moment",
           "settings": {
             "time": "10:30 am",
-            "title": "Back-to-back meetings",
-            "text": "Keep a box in your desk drawer and have one between calls.",
+            "title": "Between classes or calls",
+            "text": "Keep a box in your bag, locker or desk drawer and have one between the busy bits.",
             "pick": "Green Apple Lime",
             "color": "#8DC63F"
           }
@@ -103,8 +81,8 @@
           "type": "moment",
           "settings": {
             "time": "Tuesday",
-            "title": "Work trip",
-            "text": "A week of pouches fits in a carry-on. No powder at airport security.",
+            "title": "Travel days",
+            "text": "A week of pouches fits in a carry-on. No powder to explain at security.",
             "pick": "Raspberry Grapefruit",
             "color": "#E8505B"
           }
@@ -122,9 +100,9 @@
         "m5": {
           "type": "moment",
           "settings": {
-            "time": "Saturday",
-            "title": "Errands and brunch",
-            "text": "Weekends break routines too. One in your jacket pocket keeps it going.",
+            "time": "3:00 am",
+            "title": "Night shift break",
+            "text": "Nurse, warehouse or overnight shift? Ten seconds, no kitchen needed.",
             "pick": "Blueberry Peach",
             "color": "#7366DE"
           }
@@ -188,12 +166,28 @@
           "type": "question",
           "settings": {
             "question": "Is this store taking real orders?",
-            "answer": "<p>Not yet. jelgo is a class project for Business 4572 at Ivey Business School, and checkout runs in test mode: no card is charged and nothing ships.</p>"
+            "answer": "<p>Not yet. jelgo is a class project for Business 4572 at Ivey Business School, and checkout runs in test mode: no card is charged and nothing ships. To test it, pay with card 4242 4242 4242 4242, expiry 12/30 and security code 123, and leave \"Save my information\" unticked.</p>"
+          }
+        },
+        "q0": {
+          "type": "question",
+          "settings": {
+            "question": "Who is jelgo for?",
+            "answer": "<p>Adults who want their daily vitamins without pills or powders: commuters, students, shift workers, parents and travellers. jelgo is made for adults 18+ and is not meant for children.</p>"
+          }
+        },
+        "q8": {
+          "type": "question",
+          "settings": {
+            "question": "Is it made with real fruit?",
+            "answer": "<p>Yes. Every flavour is made with fruit juice concentrate and fruit purée, sweetened with fruit and erythritol, with no added sugar. The full ingredient list is on each flavour's page.</p>"
           }
         }
       },
       "block_order": [
+        "q0",
         "q1",
+        "q8",
         "q2",
         "q3",
         "q4",
@@ -206,13 +200,171 @@
     "cta": {
       "type": "cta-band",
       "settings": {}
+    },
+    "inside": {
+      "type": "inside",
+      "blocks": {
+        "n1": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Vitamin A",
+            "amount": "300 µg",
+            "dv": 33,
+            "role": "Helps maintain eyesight, skin and immune function."
+          }
+        },
+        "n2": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Vitamin C",
+            "amount": "90 mg",
+            "dv": 100,
+            "role": "An antioxidant that helps form collagen and supports immune function."
+          }
+        },
+        "n3": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Vitamin D3",
+            "amount": "10 µg",
+            "dv": 50,
+            "role": "Helps the body absorb calcium for strong bones and teeth."
+          }
+        },
+        "n4": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Vitamin E",
+            "amount": "6 mg",
+            "dv": 40,
+            "role": "An antioxidant that helps protect cells."
+          }
+        },
+        "n5": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Vitamin K",
+            "amount": "30 µg",
+            "dv": 25,
+            "role": "Helps blood clot normally and supports bones."
+          }
+        },
+        "n6": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Thiamin (B1)",
+            "amount": "0.6 mg",
+            "dv": 50,
+            "role": "Helps turn the carbohydrates you eat into energy."
+          }
+        },
+        "n7": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Riboflavin (B2)",
+            "amount": "0.7 mg",
+            "dv": 54,
+            "role": "Helps release energy from food."
+          }
+        },
+        "n8": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Niacin (B3)",
+            "amount": "8 mg",
+            "dv": 50,
+            "role": "Helps release energy from food and maintain skin."
+          }
+        },
+        "n9": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Pantothenic acid (B5)",
+            "amount": "2.5 mg",
+            "dv": 50,
+            "role": "Helps the body use fats, carbs and protein."
+          }
+        },
+        "n10": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Vitamin B6",
+            "amount": "0.7 mg",
+            "dv": 41,
+            "role": "Helps form red blood cells and use protein."
+          }
+        },
+        "n11": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Biotin (B7)",
+            "amount": "15 µg",
+            "dv": 50,
+            "role": "Helps the body use fats and protein."
+          }
+        },
+        "n12": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Folate (B9)",
+            "amount": "200 µg",
+            "dv": 50,
+            "role": "Helps form red blood cells."
+          }
+        },
+        "n13": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Vitamin B12",
+            "amount": "1.2 µg",
+            "dv": 50,
+            "role": "Helps form red blood cells and keep nerves healthy."
+          }
+        },
+        "n14": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Zinc",
+            "amount": "5 mg",
+            "dv": 45,
+            "role": "Supports immune function and normal growth."
+          }
+        },
+        "n15": {
+          "type": "nutrient",
+          "settings": {
+            "name": "Magnesium",
+            "amount": "50 mg",
+            "dv": 12,
+            "role": "Helps muscles and nerves work and maintains bones."
+          }
+        }
+      },
+      "block_order": [
+        "n1",
+        "n2",
+        "n3",
+        "n4",
+        "n5",
+        "n6",
+        "n7",
+        "n8",
+        "n9",
+        "n10",
+        "n11",
+        "n12",
+        "n13",
+        "n14",
+        "n15"
+      ],
+      "settings": {}
     }
   },
   "order": [
     "hero",
     "ticker",
+    "inside",
     "compare",
-    "how",
     "lineup",
     "moments",
     "faq",

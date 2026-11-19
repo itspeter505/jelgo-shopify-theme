@@ -13,13 +13,15 @@
       {%- if section.settings.lede != blank -%}<p class="lede">{{ section.settings.lede | escape }}</p>{%- endif -%}
       <div class="hero-cta">
         <a class="btn btn-ink" href="{{ routes.all_products_collection_url }}">{{ section.settings.button_primary | escape }}</a>
-        <a class="btn btn-ghost" href="#how">{{ section.settings.button_secondary | escape }}</a>
+        <a class="btn btn-ghost" href="#inside">{{ section.settings.button_secondary | escape }}</a>
       </div>
+      {%- if section.blocks.size > 0 -%}
       <div class="hero-facts">
         {%- for block in section.blocks -%}
           <div {{ block.shopify_attributes }}><b class="tnum">{{ block.settings.value | escape }}</b><span>{{ block.settings.label | escape }}</span></div>
         {%- endfor -%}
       </div>
+      {%- endif -%}
     </div>
     <div>
       <div class="stage" aria-roledescription="carousel" aria-label="Flavours">

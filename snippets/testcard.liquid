@@ -1,0 +1,11 @@
+{%- comment -%} Exact test-checkout values with copy buttons. Testers kept failing on a past expiry date or the Shop Pay "save" step. {%- endcomment -%}
+<div class="testnote testcard">
+  <b>Test mode: no real charges.</b> At checkout, type exactly:
+  <dl>
+    <div><dt>Card number</dt><dd class="tnum">4242 4242 4242 4242 <button type="button" class="copy" data-copy="4242424242424242">Copy</button></dd></div>
+    <div><dt>Expiry</dt><dd class="tnum">12 / 30</dd></div>
+    <div><dt>Security code</dt><dd class="tnum">123</dd></div>
+    <div><dt>Name on card</dt><dd>Any name</dd></div>
+  </dl>
+  <span class="tc-warn">Leave "Save my information" unticked, and don't use the Shop Pay, Apple Pay or Google Pay buttons.</span>
+</div>
