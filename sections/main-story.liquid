@@ -1,0 +1,145 @@
+{%- liquid
+  assign colors = 'F28C1E,A23FC2,E8505B,8DC63F,7366DE' | split: ','
+  assign member_count = 0
+  for block in section.blocks
+    if block.type == 'member'
+      assign member_count = member_count | plus: 1
+    endif
+  endfor
+-%}
+<section class="st-hero">
+  <div class="wrap st-hero-grid">
+    <div>
+      <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h1>{{ section.settings.heading | escape }}</h1>
+      <p class="st-lede">{{ section.settings.lede | escape }}</p>
+    </div>
+    <div class="st-fan" aria-hidden="true">
+      {%- assign shown = 0 -%}
+      {%- for p in collections.all.products limit: 24 -%}
+        {%- if p.tags contains 'bundle' or shown >= 5 or p.featured_image == blank -%}{%- continue -%}{%- endif -%}
+        {%- assign shown = shown | plus: 1 -%}
+        <img class="st-pouch st-p{{ shown }}" src="{{ p.featured_image | image_url: width: 500 }}" alt="" loading="lazy">
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head"><h2>{{ section.settings.steps_heading | escape }}</h2></div>
+    <ol class="st-steps">
+      <li style="--c:#E8505B"><span class="st-n">01</span><h3>{{ section.settings.s1_title | escape }}</h3><p>{{ section.settings.s1_text | escape }}</p></li>
+      <li style="--c:#F28C1E"><span class="st-n">02</span><h3>{{ section.settings.s2_title | escape }}</h3><p>{{ section.settings.s2_text | escape }}</p></li>
+      <li style="--c:#8DC63F"><span class="st-n">03</span><h3>{{ section.settings.s3_title | escape }}</h3><p>{{ section.settings.s3_text | escape }}</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="band tight">
+  <div class="wrap">
+    <div class="st-team">
+      <div class="st-team-head">
+        <p class="eyebrow">{{ section.settings.team_eyebrow | escape }}</p>
+        <h2>{{ section.settings.team_heading | escape }}</h2>
+        <p>{{ section.settings.team_text | escape }}</p>
+      </div>
+      <div class="st-members">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'member' -%}
+            {%- assign ci = forloop.index0 | modulo: 5 -%}
+            <article class="st-member" style="--c:#{{ colors[ci] }}" {{ block.shopify_attributes }}>
+              {%- if block.settings.image -%}
+                {{ block.settings.image | image_url: width: 240 | image_tag: class: 'st-av', alt: block.settings.name, loading: 'lazy' }}
+              {%- else -%}
+                <span class="st-av st-initial">{{ block.settings.name | slice: 0 | upcase }}</span>
+              {%- endif -%}
+              <b>{{ block.settings.name | escape }}</b>
+              {%- if block.settings.role != blank -%}<span class="st-role">{{ block.settings.role | escape }}</span>{%- endif -%}
+              {%- if block.settings.line != blank -%}<p>{{ block.settings.line | escape }}</p>{%- endif -%}
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if member_count == 0 -%}
+          <article class="st-member st-group" style="--c:#7366DE">
+            <span class="st-av st-initial">B</span>
+            <b>{{ section.settings.group_name | escape }}</b>
+            <span class="st-role">{{ section.settings.group_role | escape }}</span>
+          </article>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band tight">
+  <div class="wrap">
+    <div class="st-values">
+      <div style="--c:#F28C1E"><i></i><b>{{ section.settings.v1_title | escape }}</b><span>{{ section.settings.v1_text | escape }}</span></div>
+      <div style="--c:#A23FC2"><i></i><b>{{ section.settings.v2_title | escape }}</b><span>{{ section.settings.v2_text | escape }}</span></div>
+      <div style="--c:#8DC63F"><i></i><b>{{ section.settings.v3_title | escape }}</b><span>{{ section.settings.v3_text | escape }}</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band tight">
+  <div class="wrap">
+    <div class="st-cta">
+      <div>
+        <h2>{{ section.settings.cta_heading | escape }}</h2>
+        <p>{{ section.settings.cta_text | escape }}</p>
+      </div>
+      <a class="btn" href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}">{{ section.settings.cta_button | escape }}</a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Our story",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our story" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Vitamins people actually keep taking." },
+    { "type": "textarea", "id": "lede", "label": "Intro", "default": "We started jelgo because the hardest part of vitamins isn't buying them. It's remembering to take them." },
+    { "type": "header", "content": "How it started" },
+    { "type": "text", "id": "steps_heading", "label": "Heading", "default": "How jelgo started" },
+    { "type": "text", "id": "s1_title", "label": "Step 1 title", "default": "The problem" },
+    { "type": "textarea", "id": "s1_text", "label": "Step 1 text", "default": "Busy people buy vitamins, then stop. Pills get forgotten, and powders need water, a scoop and a shaker." },
+    { "type": "text", "id": "s2_title", "label": "Step 2 title", "default": "The idea" },
+    { "type": "textarea", "id": "s2_text", "label": "Step 2 text", "default": "In Japan and Korea, vitamin jelly in a squeeze pouch is an everyday grab. In Canada, you can barely find one." },
+    { "type": "text", "id": "s3_title", "label": "Step 3 title", "default": "jelgo" },
+    { "type": "textarea", "id": "s3_text", "label": "Step 3 text", "default": "15 vitamins and minerals, real fruit and no added sugar. Twist, squeeze, done in ten seconds." },
+    { "type": "header", "content": "Team" },
+    { "type": "text", "id": "team_eyebrow", "label": "Eyebrow", "default": "Our team" },
+    { "type": "text", "id": "team_heading", "label": "Heading", "default": "Made by students at Ivey." },
+    { "type": "textarea", "id": "team_text", "label": "Text", "default": "We're HBA students at Ivey Business School in London, Ontario, building jelgo for our Online Retailing course." },
+    { "type": "text", "id": "group_name", "label": "Team name (shown when no members are added)", "default": "Team BAMFP" },
+    { "type": "text", "id": "group_role", "label": "Team line", "default": "HBA, Ivey Business School" },
+    { "type": "header", "content": "Values" },
+    { "type": "text", "id": "v1_title", "label": "Value 1", "default": "Honest labels" },
+    { "type": "text", "id": "v1_text", "label": "Value 1 text", "default": "Every nutrient and amount, listed." },
+    { "type": "text", "id": "v2_title", "label": "Value 2", "default": "Taste first" },
+    { "type": "text", "id": "v2_text", "label": "Value 2 text", "default": "If it isn't good, nobody keeps it up." },
+    { "type": "text", "id": "v3_title", "label": "Value 3", "default": "Built with you" },
+    { "type": "text", "id": "v3_text", "label": "Value 3 text", "default": "Real people try it and tell us what to change." },
+    { "type": "header", "content": "Call to action" },
+    { "type": "text", "id": "cta_heading", "label": "Heading", "default": "Try all five flavours." },
+    { "type": "text", "id": "cta_text", "label": "Text", "default": "Start with the Discovery Box. Use code IVEY-STUDENT for 15% off." },
+    { "type": "text", "id": "cta_button", "label": "Button", "default": "Shop the Discovery Box" },
+    { "type": "url", "id": "cta_link", "label": "Button link" }
+  ],
+  "blocks": [
+    {
+      "type": "member",
+      "name": "Team member",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Name" },
+        { "type": "text", "id": "role", "label": "Role", "default": "Co-founder" },
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "line", "label": "One line about them" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Our story" }]
+}
+{% endschema %}

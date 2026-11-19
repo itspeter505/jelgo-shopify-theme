@@ -1,8 +1,10 @@
 {
   "sections": {
     "main": {
-      "type": "main-about",
-      "settings": {}
+      "type": "main-story",
+      "settings": {
+        "cta_link": "/products/discovery-box"
+      }
     }
   },
   "order": [

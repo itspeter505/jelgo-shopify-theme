@@ -385,4 +385,13 @@
     var done = function () { var o = b.textContent; b.textContent = 'Copied'; setTimeout(function () { b.textContent = o; }, 1500); };
     if (navigator.clipboard) navigator.clipboard.writeText(b.dataset.copy).then(done, done); else done();
   });
+
+  /* ---------- nutrient flip cards: click or tap to see more ---------- */
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-flip]'); if (!b) return;
+    var open = b.getAttribute('aria-expanded') === 'true';
+    b.setAttribute('aria-expanded', String(!open));
+    var name = b.querySelector('.in-top b');
+    b.setAttribute('aria-label', (name ? name.textContent : 'Nutrient') + (open ? ': show more' : ': show less'));
+  });
 })();

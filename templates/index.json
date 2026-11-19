@@ -177,7 +177,10 @@
             "name": "Vitamin A",
             "amount": "300 µg",
             "dv": 33,
-            "role": "Helps maintain eyesight, skin and immune function."
+            "role": "Helps maintain eyesight, skin and immune function.",
+            "foods": "Carrots, sweet potato, spinach",
+            "target": "900 µg",
+            "more": "Your body can also make vitamin A from beta-carotene, the pigment that makes carrots orange."
           }
         },
         "n2": {
@@ -186,7 +189,10 @@
             "name": "Vitamin C",
             "amount": "90 mg",
             "dv": 100,
-            "role": "An antioxidant that helps form collagen and supports immune function."
+            "role": "An antioxidant that helps form collagen and supports immune function.",
+            "foods": "Oranges, kiwi, red peppers",
+            "target": "90 mg",
+            "more": "Your body can't store much vitamin C, so it needs a little every day. One pouch covers all of it."
           }
         },
         "n3": {
@@ -195,7 +201,10 @@
             "name": "Vitamin D3",
             "amount": "10 µg",
             "dv": 50,
-            "role": "Helps the body absorb calcium for strong bones and teeth."
+            "role": "Helps the body absorb calcium for strong bones and teeth.",
+            "foods": "Salmon, eggs, fortified milk",
+            "target": "20 µg",
+            "more": "Your skin makes vitamin D from sunlight, which is in short supply during a Canadian winter."
           }
         },
         "n4": {
@@ -204,7 +213,10 @@
             "name": "Vitamin E",
             "amount": "6 mg",
             "dv": 40,
-            "role": "An antioxidant that helps protect cells."
+            "role": "An antioxidant that helps protect cells.",
+            "foods": "Almonds, sunflower seeds, spinach",
+            "target": "15 mg",
+            "more": "It's fat-soluble, so it's stored in the body and works alongside vitamin C."
           }
         },
         "n5": {
@@ -213,7 +225,10 @@
             "name": "Vitamin K",
             "amount": "30 µg",
             "dv": 25,
-            "role": "Helps blood clot normally and supports bones."
+            "role": "Helps blood clot normally and supports bones.",
+            "foods": "Kale, broccoli, spinach",
+            "target": "120 µg",
+            "more": "The K comes from \"Koagulation\", the German word for clotting."
           }
         },
         "n6": {
@@ -222,7 +237,10 @@
             "name": "Thiamin (B1)",
             "amount": "0.6 mg",
             "dv": 50,
-            "role": "Helps turn the carbohydrates you eat into energy."
+            "role": "Helps turn the carbohydrates you eat into energy.",
+            "foods": "Whole grains, pork, beans",
+            "target": "1.2 mg",
+            "more": "B vitamins dissolve in water, so the body uses what it needs and flushes the rest."
           }
         },
         "n7": {
@@ -231,7 +249,10 @@
             "name": "Riboflavin (B2)",
             "amount": "0.7 mg",
             "dv": 54,
-            "role": "Helps release energy from food."
+            "role": "Helps release energy from food.",
+            "foods": "Milk, eggs, almonds",
+            "target": "1.3 mg",
+            "more": "Riboflavin is naturally bright yellow, which is why some vitamins are that colour."
           }
         },
         "n8": {
@@ -240,7 +261,10 @@
             "name": "Niacin (B3)",
             "amount": "8 mg",
             "dv": 50,
-            "role": "Helps release energy from food and maintain skin."
+            "role": "Helps release energy from food and maintain skin.",
+            "foods": "Chicken, tuna, peanuts",
+            "target": "16 mg",
+            "more": "Niacin is needed by hundreds of enzymes that turn food into usable energy."
           }
         },
         "n9": {
@@ -249,7 +273,10 @@
             "name": "Pantothenic acid (B5)",
             "amount": "2.5 mg",
             "dv": 50,
-            "role": "Helps the body use fats, carbs and protein."
+            "role": "Helps the body use fats, carbs and protein.",
+            "foods": "Mushrooms, avocado, chicken",
+            "target": "5 mg",
+            "more": "Its name comes from the Greek \"pantothen\", meaning \"from everywhere\": small amounts are in almost every food."
           }
         },
         "n10": {
@@ -258,7 +285,10 @@
             "name": "Vitamin B6",
             "amount": "0.7 mg",
             "dv": 41,
-            "role": "Helps form red blood cells and use protein."
+            "role": "Helps form red blood cells and use protein.",
+            "foods": "Chickpeas, bananas, potatoes",
+            "target": "1.7 mg",
+            "more": "B6 helps the body make several messenger chemicals in the brain and nervous system."
           }
         },
         "n11": {
@@ -267,7 +297,10 @@
             "name": "Biotin (B7)",
             "amount": "15 µg",
             "dv": 50,
-            "role": "Helps the body use fats and protein."
+            "role": "Helps the body use fats and protein.",
+            "foods": "Eggs, nuts, seeds",
+            "target": "30 µg",
+            "more": "Biotin was once called vitamin H, from the German \"Haar und Haut\": hair and skin."
           }
         },
         "n12": {
@@ -276,7 +309,10 @@
             "name": "Folate (B9)",
             "amount": "200 µg",
             "dv": 50,
-            "role": "Helps form red blood cells."
+            "role": "Helps form red blood cells.",
+            "foods": "Leafy greens, lentils, asparagus",
+            "target": "400 µg",
+            "more": "The name comes from the Latin \"folium\", meaning leaf, because it was first found in spinach."
           }
         },
         "n13": {
@@ -285,7 +321,10 @@
             "name": "Vitamin B12",
             "amount": "1.2 µg",
             "dv": 50,
-            "role": "Helps form red blood cells and keep nerves healthy."
+            "role": "Helps form red blood cells and keep nerves healthy.",
+            "foods": "Fish, meat, eggs, dairy",
+            "target": "2.4 µg",
+            "more": "B12 is found almost only in animal foods, so many vegans get it from fortified foods or supplements."
           }
         },
         "n14": {
@@ -294,7 +333,10 @@
             "name": "Zinc",
             "amount": "5 mg",
             "dv": 45,
-            "role": "Supports immune function and normal growth."
+            "role": "Supports immune function and normal growth.",
+            "foods": "Oysters, beef, pumpkin seeds",
+            "target": "11 mg",
+            "more": "The body has no special store for zinc, so a steady daily supply matters."
           }
         },
         "n15": {
@@ -303,7 +345,10 @@
             "name": "Magnesium",
             "amount": "50 mg",
             "dv": 12,
-            "role": "Helps muscles and nerves work and maintains bones."
+            "role": "Helps muscles and nerves work and maintains bones.",
+            "foods": "Nuts, seeds, leafy greens",
+            "target": "420 mg",
+            "more": "Magnesium takes part in hundreds of reactions in the body. One pouch covers a starting share, and food does the rest."
           }
         }
       },
@@ -324,7 +369,9 @@
         "n14",
         "n15"
       ],
-      "settings": {}
+      "settings": {
+        "intro": "Built around Canadian daily values for adults. Tap any card to see where else it is found and how much one pouch covers."
+      }
     }
   },
   "order": [

@@ -15,12 +15,23 @@
               assign bar = dv
             endif
           -%}
-          <article class="in-card" {{ block.shopify_attributes }}>
-            <div class="in-top"><b>{{ block.settings.name | escape }}</b><span class="tnum">{{ block.settings.amount | escape }}</span></div>
-            <div class="in-bar" role="img" aria-label="{{ dv }}% of the daily value"><i style="width:{{ bar }}%"></i></div>
-            <div class="in-dv tnum">{{ dv }}% DV</div>
-            <p>{{ block.settings.role | escape }}</p>
-          </article>
+          <div class="in-card" {{ block.shopify_attributes }}>
+            <button type="button" class="in-flip" aria-expanded="false" data-flip aria-label="{{ block.settings.name | escape }}: show more">
+              <span class="in-face in-front">
+                <span class="in-top"><b>{{ block.settings.name | escape }}</b><span class="tnum">{{ block.settings.amount | escape }}</span></span>
+                <span class="in-bar" role="img" aria-label="{{ dv }}% of the daily value"><i style="width:{{ bar }}%"></i></span>
+                <span class="in-dv tnum">{{ dv }}% DV</span>
+                <span class="in-role">{{ block.settings.role | escape }}</span>
+                <span class="in-more" aria-hidden="true">More <i>+</i></span>
+              </span>
+              <span class="in-face in-back">
+                <span class="in-top"><b>{{ block.settings.name | escape }}</b><span class="in-x" aria-hidden="true">×</span></span>
+                {%- if block.settings.foods != blank -%}<span class="in-row"><em>Also found in</em>{{ block.settings.foods | escape }}</span>{%- endif -%}
+                {%- if block.settings.target != blank -%}<span class="in-row"><em>Daily value</em><span class="tnum">{{ block.settings.amount | escape }} of {{ block.settings.target | escape }} per pouch</span></span>{%- endif -%}
+                {%- if block.settings.more != blank -%}<span class="in-fact">{{ block.settings.more | escape }}</span>{%- endif -%}
+              </span>
+            </button>
+          </div>
         {%- endfor -%}
       </div>
       <aside class="in-side">
@@ -44,7 +55,7 @@
   "name": "What's inside",
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "15 vitamins and minerals in every pouch." },
-    { "type": "textarea", "id": "intro", "label": "Intro", "default": "Built around Canadian daily values for adults. Here is what each pouch carries and what each nutrient does." },
+    { "type": "textarea", "id": "intro", "label": "Intro", "default": "Built around Canadian daily values for adults. Tap any card to see where else it is found and how much one pouch covers." },
     { "type": "text", "id": "side_heading", "label": "Side heading", "default": "Also in every pouch" },
     { "type": "text", "id": "fact1", "label": "Fact 1", "default": "Made with real fruit juice and fruit purée" },
     { "type": "text", "id": "fact2", "label": "Fact 2", "default": "No added sugar: sweetened with fruit and erythritol" },
@@ -61,7 +72,10 @@
         { "type": "text", "id": "name", "label": "Name", "default": "Vitamin C" },
         { "type": "text", "id": "amount", "label": "Amount", "default": "90 mg" },
         { "type": "range", "id": "dv", "label": "% daily value", "min": 0, "max": 100, "step": 1, "default": 100 },
-        { "type": "text", "id": "role", "label": "What it does", "default": "An antioxidant that helps form collagen." }
+        { "type": "text", "id": "role", "label": "What it does", "default": "An antioxidant that helps form collagen." },
+        { "type": "text", "id": "foods", "label": "Also found in (shown on the back)", "default": "Oranges, kiwi, red peppers" },
+        { "type": "text", "id": "target", "label": "Daily value (shown on the back)", "default": "90 mg" },
+        { "type": "textarea", "id": "more", "label": "Did you know (shown on the back)" }
       ]
     }
   ],
