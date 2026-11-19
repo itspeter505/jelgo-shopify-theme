@@ -598,6 +598,7 @@ footer.site-foot{margin-top:88px;border-top:1px solid var(--line);padding-block:
 .js-rv .in-card .in-bar i{width:0 !important;transition:width 1s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0) * 70ms + 250ms)}
 .js-rv .in-card.in .in-bar i{width:var(--w) !important}
 .js-rv .sec-head h2.rv{transform:translateY(36px)}
+.js-rv .sec-head h2.rv.in{transform:none}
 /* moments: pinned sideways scroll on desktop */
 .mo-progress{display:none}
 .mo-pin.pinned{padding:0}
