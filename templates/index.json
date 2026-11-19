@@ -17,39 +17,6 @@
       "type": "compare",
       "settings": {}
     },
-    "how": {
-      "type": "how-it-works",
-      "blocks": {
-        "s1": {
-          "type": "step",
-          "settings": {
-            "title": "Twist the cap.",
-            "text": "The spout opens with a quarter turn. No scoop, no measuring, no water. Keep a few in the office fridge if you like it cold."
-          }
-        },
-        "s2": {
-          "type": "step",
-          "settings": {
-            "title": "Squeeze for ten seconds.",
-            "text": "Each pouch is one full serving as a smooth, fruit-flavoured jelly. Have it at your desk, on the platform or at the airport gate."
-          }
-        },
-        "s3": {
-          "type": "step",
-          "settings": {
-            "title": "Cap it and go.",
-            "text": "Nothing to rinse and nothing to carry home. Re-cap the empty pouch and drop it in the bin."
-          }
-        }
-      },
-      "block_order": [
-        "s1",
-        "s2",
-        "s3"
-      ],
-      "settings": {},
-      "disabled": true
-    },
     "lineup": {
       "type": "lineup",
       "settings": {}
