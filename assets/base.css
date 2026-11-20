@@ -641,3 +641,12 @@ footer.site-foot{margin-top:88px;border-top:1px solid var(--line);padding-block:
 @keyframes swWin{50%{transform:scale(1.05)}}
 @media (max-width:640px){.sw-dialog{grid-template-columns:1fr;padding:28px 22px;gap:16px;text-align:center}.sw-wheel-box{width:220px;height:220px;margin:0 auto}.sw-code{justify-content:center}}
 @media (prefers-reduced-motion:reduce){.sw-wheel{transition-duration:.6s}.sw-dialog,.sw-backdrop{animation:none}}
+
+.sw-form{display:grid;gap:10px}
+.sw-field{display:grid;gap:4px;text-align:left}
+.sw-field span{font-size:12px;font-weight:600;color:var(--muted)}
+.sw-field input{font:inherit;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.sw-field input:focus{outline:2px solid var(--ink);outline-offset:1px}
+.sw-check{display:flex;gap:8px;align-items:flex-start;text-align:left;font-size:12.5px;color:var(--muted);line-height:1.4}
+.sw-check input{margin-top:2px;accent-color:var(--ink)}
+.sw-form .form-err{margin:0;min-height:0}

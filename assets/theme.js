@@ -463,29 +463,37 @@
     window.addEventListener('load', function () { setupPin(); req(); });
   })();
 
-  /* ---------- spin the wheel: opens once per visitor, always lands on 20% off ---------- */
+  /* ---------- spin the wheel: lands on 20% off, then name + email unlock the code ---------- */
   (function () {
     var wrap = document.querySelector('[data-spin-wheel]'); if (!wrap) return;
     var wheel = wrap.querySelector('[data-sw-wheel]'), spinBtn = wrap.querySelector('[data-sw-spin]');
-    var play = wrap.querySelector('[data-sw-step="play"]'), won = wrap.querySelector('[data-sw-step="won"]');
+    var steps = { play: wrap.querySelector('[data-sw-step="play"]'), email: wrap.querySelector('[data-sw-step="email"]'), won: wrap.querySelector('[data-sw-step="won"]') };
+    var form = wrap.querySelector('[data-sw-form]'), err = wrap.querySelector('[data-sw-err]');
     var timer = wrap.querySelector('[data-sw-timer]'), pill = document.querySelector('[data-sw-pill]'), pillTimer = pill && pill.querySelector('[data-sw-pill-timer]');
     var KEY = 'jelgo-spin-v1', DAY = 24 * 3600 * 1000, tick = 0, lastFocus = null;
     function get(k, store) { try { return (store || localStorage).getItem(k); } catch (e) { return null; } }
     function set(k, v, store) { try { (store || localStorage).setItem(k, v); } catch (e) {} }
-    function wonAt() { var t = Number(get(KEY)); return t > 0 ? t : 0; }
-    function left() { var t = wonAt(); return t ? Math.max(0, t + DAY - Date.now()) : 0; }
+    function spunAt() { var t = Number(get(KEY)); return t > 0 ? t : 0; }
+    function revealed() { return get(KEY + '-email') === '1'; }
+    function left() { var t = spunAt(); return t ? Math.max(0, t + DAY - Date.now()) : 0; }
     function fmt(ms) { var s = Math.floor(ms / 1000), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return [h, m, x].map(function (n) { return String(n).padStart(2, '0'); }).join(':'); }
     function render() {
       var ms = left(), txt = fmt(ms);
       if (timer) timer.textContent = txt;
-      if (pill) { pill.hidden = !(wonAt() && ms > 0 && wrap.hidden); if (pillTimer) pillTimer.textContent = txt; }
+      if (pill) { pill.hidden = !(spunAt() && ms > 0 && wrap.hidden); if (pillTimer) pillTimer.textContent = revealed() ? txt : 'unlock'; }
     }
     function startTick() { if (!tick) { render(); tick = setInterval(render, 1000); } }
-    function showWon() { play.hidden = true; won.hidden = false; wrap.classList.add('won'); startTick(); }
+    function show(name) {
+      Object.keys(steps).forEach(function (k) { steps[k].hidden = k !== name; });
+      wrap.classList.toggle('won', name !== 'play');
+      if (name !== 'play') startTick();
+      var f = steps[name].querySelector(name === 'email' ? 'input[type=text]' : name === 'won' ? '[data-copy]' : '[data-sw-spin]');
+      if (f) setTimeout(function () { f.focus(); }, 60);
+    }
     function open() {
       lastFocus = document.activeElement; wrap.hidden = false; if (pill) pill.hidden = true;
-      if (wonAt()) { wheel.style.transition = 'none'; wheel.style.transform = 'rotate(-45deg)'; showWon(); }
-      setTimeout(function () { var f = wrap.querySelector(wonAt() ? '[data-copy]' : '[data-sw-spin]'); if (f) f.focus(); }, 60);
+      if (spunAt()) { wheel.style.transition = 'none'; wheel.style.transform = 'rotate(-45deg)'; show(revealed() ? 'won' : 'email'); }
+      else show('play');
     }
     function close() { wrap.hidden = true; set(KEY + '-closed', '1', sessionStorage); render(); if (lastFocus && lastFocus.focus) lastFocus.focus(); }
     spinBtn.addEventListener('click', function () {
@@ -493,16 +501,27 @@
       // the 20% slice is centred at 45 degrees; bring it under the pointer after five full turns, with a little wobble
       var end = 360 * 5 - 45 + (Math.random() * 40 - 20);
       wheel.style.transform = 'rotate(' + end + 'deg)';
-      var done = function () { set(KEY, String(Date.now())); showWon(); };
-      var fired = false;
-      wheel.addEventListener('transitionend', function f() { if (fired) return; fired = true; wheel.removeEventListener('transitionend', f); done(); });
-      setTimeout(function () { if (!fired) { fired = true; done(); } }, 5200);
+      var fired = false, done = function () { if (fired) return; fired = true; set(KEY, String(Date.now())); show('email'); };
+      wheel.addEventListener('transitionend', done, { once: true });
+      setTimeout(done, 5200);
+    });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault(); err.textContent = '';
+      var name = form.querySelector('[name="contact[first_name]"]'), email = form.querySelector('[name="contact[email]"]'), ok = form.querySelector('[name="sw_consent"]');
+      if (!name.value.trim()) { err.textContent = 'Please enter your first name.'; name.focus(); return; }
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())) { err.textContent = 'Please enter a valid email.'; email.focus(); return; }
+      if (!ok.checked) { err.textContent = 'Tick the box so we can email you.'; ok.focus(); return; }
+      var btn = form.querySelector('button[type=submit]'); btn.disabled = true; btn.textContent = 'Unlocking…';
+      var finish = function () { set(KEY + '-email', '1'); show('won'); btn.disabled = false; btn.textContent = 'Reveal my code'; };
+      // saves them as a Shopify customer subscribed to email marketing (tags: newsletter, spin-wheel)
+      fetch(form.getAttribute('action'), { method: 'POST', body: new FormData(form), credentials: 'same-origin', headers: { 'Accept': 'text/html' } })
+        .then(finish, finish);
     });
     wrap.querySelectorAll('[data-sw-close]').forEach(function (b) { b.addEventListener('click', close); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !wrap.hidden) close(); });
     if (pill) pill.addEventListener('click', open);
-    if (wonAt()) { if (left() > 0) startTick(); render(); return; }
+    if (spunAt()) { if (left() > 0) startTick(); render(); return; }
     if (get(KEY + '-closed', sessionStorage)) return;
-    setTimeout(function () { if (wrap.hidden && !document.querySelector('.drawer.open, [data-drawer].open')) open(); }, 4000);
+    setTimeout(function () { if (wrap.hidden) open(); }, 4000);
   })();
 })();

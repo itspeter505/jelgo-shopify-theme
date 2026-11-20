@@ -34,9 +34,24 @@
       <div data-sw-step="play">
         <p class="eyebrow">jelgo launch</p>
         <h2 id="sw-title">Spin for a discount</h2>
-        <p class="sw-sub">One spin per visitor. Your code appears right away.</p>
+        <p class="sw-sub">One spin per visitor. Spin, then unlock your code with your email.</p>
         <button type="button" class="btn btn-ink sw-go" data-sw-spin>Spin the wheel</button>
         <button type="button" class="sw-skip" data-sw-close>No thanks</button>
+      </div>
+      <div data-sw-step="email" hidden>
+        <p class="eyebrow">You landed on 20% off</p>
+        <h2>Unlock your code</h2>
+        <p class="sw-sub">Enter your name and email to reveal your 20% code.</p>
+        <form class="sw-form" data-sw-form action="{{ routes.root_url }}contact#sw" method="post" novalidate>
+          <input type="hidden" name="form_type" value="customer">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="contact[tags]" value="newsletter,spin-wheel">
+          <label class="sw-field"><span>First name</span><input type="text" name="contact[first_name]" autocomplete="given-name" required></label>
+          <label class="sw-field"><span>Email</span><input type="email" name="contact[email]" autocomplete="email" required></label>
+          <label class="sw-check"><input type="checkbox" name="sw_consent" required> <span>Yes, email me jelgo news and promotions. I can unsubscribe at any time.</span></label>
+          <p class="form-err" data-sw-err role="alert"></p>
+          <button type="submit" class="btn btn-ink sw-go">Reveal my code</button>
+        </form>
       </div>
       <div data-sw-step="won" hidden>
         <p class="eyebrow">You won</p>
