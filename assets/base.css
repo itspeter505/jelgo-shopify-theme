@@ -684,3 +684,25 @@ footer.site-foot{margin-top:88px;border-top:1px solid var(--line);padding-block:
 @keyframes sqDrop{0%{opacity:0;transform:translate(0,0) rotate(-45deg) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translate(0,-60px) rotate(-45deg) scale(1)}}
 @media (max-width:680px){.sq-dialog{grid-template-columns:1fr;padding:24px 20px;gap:16px;max-height:94vh;overflow:auto}.sq-stage{height:250px}.sq-pouch{width:120px;height:190px}.sq-meter{height:170px}.sq-how{font-size:13.5px}}
 @media (prefers-reduced-motion:reduce){.sq-pouch::before,.sq-pouch.held .sq-drops i{animation:none}}
+
+/* squeeze: excitement layer */
+.sq-stage{position:relative;overflow:hidden;background:color-mix(in oklab,#F28C1E calc(14% + 30% * var(--p,0)),var(--bg));transition:background .1s linear}
+.sq-stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 55%,rgba(255,214,120,calc(.85 * var(--p,0))),transparent 60%);mix-blend-mode:screen}
+.sq-fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.sq-pct{position:absolute;top:14px;left:50%;transform:translateX(-50%) scale(var(--ps,1));display:flex;align-items:baseline;gap:4px;z-index:3;pointer-events:none;transition:transform .18s cubic-bezier(.3,1.6,.5,1)}
+.sq-pct b{font-family:var(--display);font-weight:800;font-size:40px;line-height:1;color:var(--ink);text-shadow:0 2px 0 #fff}
+.sq-pct span{font-family:var(--display);font-weight:800;font-size:14px;color:var(--ink)}
+.sq-pct.bump{--ps:1.35}
+.sq-mute{position:absolute;top:10px;left:10px;z-index:3;width:30px;height:30px;border-radius:50%;border:0;background:rgba(255,255,255,.75);font-size:15px;cursor:pointer;color:var(--ink)}
+.sq-mute[aria-pressed="true"]{opacity:.45;text-decoration:line-through}
+.sq-pouch{z-index:1;margin-top:28px}
+.sq-pouch img{transform:translate(var(--sx,0px),var(--sy,0px)) rotate(var(--sr,0deg)) scaleX(calc(1 - .26 * var(--p,0) - .06 * var(--h,0))) scaleY(calc(1 - .06 * var(--p,0) + .02 * var(--h,0)));transition:none}
+.sq-wrap.done .sq-pouch img{animation:sqBurst .5s cubic-bezier(.2,.9,.3,1.4) forwards}
+.sq-stamp{display:inline-block;font-family:var(--display);font-weight:800;font-size:44px;line-height:1;color:#fff;background:#E8505B;padding:10px 18px;border-radius:14px;transform:rotate(-6deg);box-shadow:0 10px 24px -10px rgba(232,80,91,.7);animation:sqStamp .55s cubic-bezier(.2,1.6,.4,1) both;margin:4px 0 14px}
+.sq-dialog.flash{animation:sqFlash .5s ease}
+.sq-confetti{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:95}
+@keyframes sqBurst{0%{transform:scale(.7,.9)}45%{transform:scale(1.25,1.1) rotate(4deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes sqStamp{0%{opacity:0;transform:rotate(-6deg) scale(2.6)}100%{opacity:1;transform:rotate(-6deg) scale(1)}}
+@keyframes sqFlash{0%{box-shadow:0 0 0 0 rgba(242,140,30,.9)}100%{box-shadow:0 0 0 40px rgba(242,140,30,0)}}
+@media (max-width:680px){.sq-pct b{font-size:32px}.sq-stamp{font-size:34px}}
+.sq-drops{display:none}

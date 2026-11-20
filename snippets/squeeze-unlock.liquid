@@ -8,7 +8,10 @@
   <div class="sq-dialog" role="dialog" aria-modal="true" aria-labelledby="sq-title">
     <button type="button" class="sw-x" data-sq-close aria-label="Close">×</button>
 
-    <div class="sq-stage">
+    <div class="sq-stage" data-sq-stage>
+      <canvas class="sq-fx" data-sq-fx aria-hidden="true"></canvas>
+      <div class="sq-pct" aria-live="off"><b class="tnum" data-sq-pct>0%</b><span>OFF</span></div>
+      <button type="button" class="sq-mute" data-sq-mute aria-pressed="false" aria-label="Mute sound">♪</button>
       <button type="button" class="sq-pouch" data-sq-pouch aria-describedby="sq-how">
         <span class="sq-drops" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <img src="{{ '3d-orange-mango-front.webp' | asset_url }}" alt="A jelgo pouch. Press and hold to squeeze it." width="533" height="774" draggable="false">
@@ -23,10 +26,10 @@
     <div class="sq-body">
       <div data-sq-step="play">
         <p class="eyebrow">jelgo launch</p>
-        <h2 id="sq-title">Squeeze to unlock 20% off</h2>
+        <h2 id="sq-title">Squeeze the pouch. Unlock 20% off.</h2>
         <ol class="sq-how" id="sq-how">
           <li><b>Press and hold</b> the pouch. On a computer, click and hold, or hold the space bar.</li>
-          <li><b>Keep holding for 5 seconds</b> until the pouch is empty. Let go early and it refills.</li>
+          <li><b>Keep holding for 5 seconds.</b> Your discount climbs to 20% as the pouch empties. Let go early and it drops back.</li>
           <li><b>Enter your email</b> to reveal your 20% code.</li>
         </ol>
         <p class="sq-status" data-sq-status aria-live="polite">Ready when you are.</p>
@@ -34,8 +37,8 @@
       </div>
 
       <div data-sq-step="email" hidden>
-        <p class="eyebrow">Pouch empty</p>
-        <h2>You unlocked 20% off</h2>
+        <div class="sq-stamp">20% OFF</div>
+        <h2>You squeezed it empty!</h2>
         <p class="sw-sub">Enter your name and email to reveal your code.</p>
         <form class="sw-form" data-sq-form action="{{ routes.root_url }}contact#sq" method="post" novalidate>
           <input type="hidden" name="form_type" value="customer">
