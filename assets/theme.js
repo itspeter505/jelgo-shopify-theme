@@ -522,6 +522,6 @@
     if (pill) pill.addEventListener('click', open);
     if (spunAt()) { if (left() > 0) startTick(); render(); return; }
     if (get(KEY + '-closed', sessionStorage)) return;
-    setTimeout(function () { if (wrap.hidden) open(); }, 4000);
+    setTimeout(function () { if (wrap.hidden) open(); }, 1500);
   })();
 })();
