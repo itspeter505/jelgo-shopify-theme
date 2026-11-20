@@ -1,0 +1,53 @@
+{%- comment -%}
+  Spin-the-wheel popup. Opens once per visitor a few seconds after landing (not on the cart page).
+  The wheel always lands on 20% off; the win shows code GETTODAY with a 24-hour countdown kept in the visitor's browser.
+{%- endcomment -%}
+{%- unless template.name == 'cart' -%}
+<div class="sw-wrap" data-spin-wheel hidden>
+  <div class="sw-backdrop" data-sw-close></div>
+  <div class="sw-dialog" role="dialog" aria-modal="true" aria-labelledby="sw-title">
+    <button type="button" class="sw-x" data-sw-close aria-label="Close">×</button>
+    <div class="sw-wheel-box">
+      <div class="sw-pointer" aria-hidden="true"></div>
+      <svg class="sw-wheel" data-sw-wheel viewBox="-110 -110 220 220" aria-hidden="true">
+        <g>
+          <path d="M0 0 L0 -100 A100 100 0 0 1 100 0 Z" fill="#F28C1E"/>
+          <path d="M0 0 L100 0 A100 100 0 0 1 0 100 Z" fill="#A23FC2"/>
+          <path d="M0 0 L0 100 A100 100 0 0 1 -100 0 Z" fill="#8DC63F"/>
+          <path d="M0 0 L-100 0 A100 100 0 0 1 0 -100 Z" fill="#7366DE"/>
+        </g>
+        <g font-family="Unbounded, sans-serif" font-weight="800" fill="#fff" text-anchor="middle">
+          <text transform="rotate(45) translate(0 -58)" font-size="17">20%</text>
+          <text transform="rotate(45) translate(0 -40)" font-size="9">OFF</text>
+          <text transform="rotate(135) translate(0 -58)" font-size="17">5%</text>
+          <text transform="rotate(135) translate(0 -40)" font-size="9">OFF</text>
+          <text transform="rotate(225) translate(0 -60)" font-size="9.5">THANK YOU</text>
+          <text transform="rotate(225) translate(0 -47)" font-size="9.5">FOR PLAYING</text>
+          <text transform="rotate(315) translate(0 -58)" font-size="17">10%</text>
+          <text transform="rotate(315) translate(0 -40)" font-size="9">OFF</text>
+        </g>
+        <circle r="100" fill="none" stroke="#fff" stroke-width="5"/>
+        <circle r="16" fill="#15172A" stroke="#fff" stroke-width="4"/>
+      </svg>
+    </div>
+    <div class="sw-body">
+      <div data-sw-step="play">
+        <p class="eyebrow">jelgo launch</p>
+        <h2 id="sw-title">Spin for a discount</h2>
+        <p class="sw-sub">One spin per visitor. Your code appears right away.</p>
+        <button type="button" class="btn btn-ink sw-go" data-sw-spin>Spin the wheel</button>
+        <button type="button" class="sw-skip" data-sw-close>No thanks</button>
+      </div>
+      <div data-sw-step="won" hidden>
+        <p class="eyebrow">You won</p>
+        <h2>20% off your order</h2>
+        <p class="sw-sub">Use code <b>GETTODAY</b> within 24 hours and get 20% off.</p>
+        <div class="sw-code"><span class="tnum">GETTODAY</span><button type="button" class="copy" data-copy="GETTODAY">Copy</button></div>
+        <p class="sw-timer">Expires in <b class="tnum" data-sw-timer>24:00:00</b></p>
+        <a class="btn btn-ink sw-go" href="{{ routes.all_products_collection_url }}" data-sw-shop>Shop now</a>
+      </div>
+    </div>
+  </div>
+</div>
+<button type="button" class="sw-pill" data-sw-pill hidden><span>20% off</span> <b class="tnum" data-sw-pill-timer></b></button>
+{%- endunless -%}

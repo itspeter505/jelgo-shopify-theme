@@ -462,4 +462,47 @@
     window.addEventListener('resize', function () { setupPin(); req(); });
     window.addEventListener('load', function () { setupPin(); req(); });
   })();
+
+  /* ---------- spin the wheel: opens once per visitor, always lands on 20% off ---------- */
+  (function () {
+    var wrap = document.querySelector('[data-spin-wheel]'); if (!wrap) return;
+    var wheel = wrap.querySelector('[data-sw-wheel]'), spinBtn = wrap.querySelector('[data-sw-spin]');
+    var play = wrap.querySelector('[data-sw-step="play"]'), won = wrap.querySelector('[data-sw-step="won"]');
+    var timer = wrap.querySelector('[data-sw-timer]'), pill = document.querySelector('[data-sw-pill]'), pillTimer = pill && pill.querySelector('[data-sw-pill-timer]');
+    var KEY = 'jelgo-spin-v1', DAY = 24 * 3600 * 1000, tick = 0, lastFocus = null;
+    function get(k, store) { try { return (store || localStorage).getItem(k); } catch (e) { return null; } }
+    function set(k, v, store) { try { (store || localStorage).setItem(k, v); } catch (e) {} }
+    function wonAt() { var t = Number(get(KEY)); return t > 0 ? t : 0; }
+    function left() { var t = wonAt(); return t ? Math.max(0, t + DAY - Date.now()) : 0; }
+    function fmt(ms) { var s = Math.floor(ms / 1000), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return [h, m, x].map(function (n) { return String(n).padStart(2, '0'); }).join(':'); }
+    function render() {
+      var ms = left(), txt = fmt(ms);
+      if (timer) timer.textContent = txt;
+      if (pill) { pill.hidden = !(wonAt() && ms > 0 && wrap.hidden); if (pillTimer) pillTimer.textContent = txt; }
+    }
+    function startTick() { if (!tick) { render(); tick = setInterval(render, 1000); } }
+    function showWon() { play.hidden = true; won.hidden = false; wrap.classList.add('won'); startTick(); }
+    function open() {
+      lastFocus = document.activeElement; wrap.hidden = false; if (pill) pill.hidden = true;
+      if (wonAt()) { wheel.style.transition = 'none'; wheel.style.transform = 'rotate(-45deg)'; showWon(); }
+      setTimeout(function () { var f = wrap.querySelector(wonAt() ? '[data-copy]' : '[data-sw-spin]'); if (f) f.focus(); }, 60);
+    }
+    function close() { wrap.hidden = true; set(KEY + '-closed', '1', sessionStorage); render(); if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+    spinBtn.addEventListener('click', function () {
+      spinBtn.disabled = true; spinBtn.textContent = 'Spinning…';
+      // the 20% slice is centred at 45 degrees; bring it under the pointer after five full turns, with a little wobble
+      var end = 360 * 5 - 45 + (Math.random() * 40 - 20);
+      wheel.style.transform = 'rotate(' + end + 'deg)';
+      var done = function () { set(KEY, String(Date.now())); showWon(); };
+      var fired = false;
+      wheel.addEventListener('transitionend', function f() { if (fired) return; fired = true; wheel.removeEventListener('transitionend', f); done(); });
+      setTimeout(function () { if (!fired) { fired = true; done(); } }, 5200);
+    });
+    wrap.querySelectorAll('[data-sw-close]').forEach(function (b) { b.addEventListener('click', close); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !wrap.hidden) close(); });
+    if (pill) pill.addEventListener('click', open);
+    if (wonAt()) { if (left() > 0) startTick(); render(); return; }
+    if (get(KEY + '-closed', sessionStorage)) return;
+    setTimeout(function () { if (wrap.hidden && !document.querySelector('.drawer.open, [data-drawer].open')) open(); }, 4000);
+  })();
 })();
