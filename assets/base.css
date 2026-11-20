@@ -543,7 +543,8 @@ footer.site-foot{margin-top:88px;border-top:1px solid var(--line);padding-block:
 .in-row em{display:block;font-style:normal;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
 .in-fact{display:block;margin-top:10px;padding-top:10px;border-top:1px dashed color-mix(in oklab,var(--p) 40%,var(--line));font-size:13px;line-height:1.45;color:var(--ink)}
 @media (prefers-reduced-motion:reduce){.in-flip{transition:none}}
-.testcard .tc-code{display:block;margin:6px 0 8px;font-size:13px}
+.testcard .tc-code{display:flex;align-items:center;gap:6px 8px;flex-wrap:wrap;margin:6px 0 8px;font-size:13px}
+.testcard .tc-code b{font-family:var(--mono);white-space:nowrap}
 /* ---------- Our story ---------- */
 .st-hero{background:color-mix(in oklab,#7366DE 14%,var(--bg));overflow:hidden}
 .st-hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding-block:72px}
