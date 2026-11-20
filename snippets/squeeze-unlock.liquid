@@ -1,0 +1,64 @@
+{%- comment -%}
+  Squeeze to unlock: hold the pouch for 5 seconds to empty it, then name + email reveal code GETTODAY (20% off).
+  Opens once per visitor 1.5 s after landing (not on the cart page). Replaces the spin-the-wheel popup.
+{%- endcomment -%}
+{%- unless template.name == 'cart' -%}
+<div class="sq-wrap" data-squeeze hidden>
+  <div class="sw-backdrop" data-sq-close></div>
+  <div class="sq-dialog" role="dialog" aria-modal="true" aria-labelledby="sq-title">
+    <button type="button" class="sw-x" data-sq-close aria-label="Close">×</button>
+
+    <div class="sq-stage">
+      <button type="button" class="sq-pouch" data-sq-pouch aria-describedby="sq-how">
+        <span class="sq-drops" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <img src="{{ '3d-orange-mango-front.webp' | asset_url }}" alt="A jelgo pouch. Press and hold to squeeze it." width="533" height="774" draggable="false">
+        <span class="sq-hint" data-sq-hint>Press &amp; hold</span>
+      </button>
+      <div class="sq-meter" aria-hidden="true">
+        <div class="sq-meter-bar"><i data-sq-level></i></div>
+        <span class="tnum" data-sq-secs>5.0 s</span>
+      </div>
+    </div>
+
+    <div class="sq-body">
+      <div data-sq-step="play">
+        <p class="eyebrow">jelgo launch</p>
+        <h2 id="sq-title">Squeeze to unlock 20% off</h2>
+        <ol class="sq-how" id="sq-how">
+          <li><b>Press and hold</b> the pouch. On a computer, click and hold, or hold the space bar.</li>
+          <li><b>Keep holding for 5 seconds</b> until the pouch is empty. Let go early and it refills.</li>
+          <li><b>Enter your email</b> to reveal your 20% code.</li>
+        </ol>
+        <p class="sq-status" data-sq-status aria-live="polite">Ready when you are.</p>
+        <button type="button" class="sw-skip" data-sq-close>No thanks</button>
+      </div>
+
+      <div data-sq-step="email" hidden>
+        <p class="eyebrow">Pouch empty</p>
+        <h2>You unlocked 20% off</h2>
+        <p class="sw-sub">Enter your name and email to reveal your code.</p>
+        <form class="sw-form" data-sq-form action="{{ routes.root_url }}contact#sq" method="post" novalidate>
+          <input type="hidden" name="form_type" value="customer">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="contact[tags]" value="newsletter,squeeze-unlock">
+          <label class="sw-field"><span>First name</span><input type="text" name="contact[first_name]" autocomplete="given-name" required></label>
+          <label class="sw-field"><span>Email</span><input type="email" name="contact[email]" autocomplete="email" required></label>
+          <label class="sw-check"><input type="checkbox" name="sq_consent" required> <span>Yes, email me jelgo news and promotions. I can unsubscribe at any time.</span></label>
+          <p class="form-err" data-sq-err role="alert"></p>
+          <button type="submit" class="btn btn-ink sw-go">Reveal my code</button>
+        </form>
+      </div>
+
+      <div data-sq-step="won" hidden>
+        <p class="eyebrow">Here's your code</p>
+        <h2>20% off your order</h2>
+        <p class="sw-sub">Use code <b>GETTODAY</b> within 24 hours and get 20% off.</p>
+        <div class="sw-code"><span class="tnum">GETTODAY</span><button type="button" class="copy" data-copy="GETTODAY">Copy</button></div>
+        <p class="sw-timer">Expires in <b class="tnum" data-sq-timer>24:00:00</b></p>
+        <a class="btn btn-ink sw-go" href="{{ routes.all_products_collection_url }}">Shop now</a>
+      </div>
+    </div>
+  </div>
+</div>
+<button type="button" class="sw-pill" data-sq-pill hidden><span>20% off</span> <b class="tnum" data-sq-pill-timer></b></button>
+{%- endunless -%}

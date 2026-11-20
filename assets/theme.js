@@ -463,64 +463,93 @@
     window.addEventListener('load', function () { setupPin(); req(); });
   })();
 
-  /* ---------- spin the wheel: lands on 20% off, then name + email unlock the code ---------- */
+  /* ---------- squeeze to unlock: hold the pouch 5 s, then name + email reveal code GETTODAY ---------- */
   (function () {
-    var wrap = document.querySelector('[data-spin-wheel]'); if (!wrap) return;
-    var wheel = wrap.querySelector('[data-sw-wheel]'), spinBtn = wrap.querySelector('[data-sw-spin]');
-    var steps = { play: wrap.querySelector('[data-sw-step="play"]'), email: wrap.querySelector('[data-sw-step="email"]'), won: wrap.querySelector('[data-sw-step="won"]') };
-    var form = wrap.querySelector('[data-sw-form]'), err = wrap.querySelector('[data-sw-err]');
-    var timer = wrap.querySelector('[data-sw-timer]'), pill = document.querySelector('[data-sw-pill]'), pillTimer = pill && pill.querySelector('[data-sw-pill-timer]');
-    var KEY = 'jelgo-spin-v1', DAY = 24 * 3600 * 1000, tick = 0, lastFocus = null;
-    function get(k, store) { try { return (store || localStorage).getItem(k); } catch (e) { return null; } }
-    function set(k, v, store) { try { (store || localStorage).setItem(k, v); } catch (e) {} }
-    function spunAt() { var t = Number(get(KEY)); return t > 0 ? t : 0; }
+    var wrap = document.querySelector('[data-squeeze]'); if (!wrap) return;
+    var pouch = wrap.querySelector('[data-sq-pouch]'), level = wrap.querySelector('[data-sq-level]'), secs = wrap.querySelector('[data-sq-secs]');
+    var hint = wrap.querySelector('[data-sq-hint]'), status = wrap.querySelector('[data-sq-status]');
+    var steps = { play: wrap.querySelector('[data-sq-step="play"]'), email: wrap.querySelector('[data-sq-step="email"]'), won: wrap.querySelector('[data-sq-step="won"]') };
+    var form = wrap.querySelector('[data-sq-form]'), err = wrap.querySelector('[data-sq-err]');
+    var timer = wrap.querySelector('[data-sq-timer]'), pill = document.querySelector('[data-sq-pill]'), pillTimer = pill && pill.querySelector('[data-sq-pill-timer]');
+    var KEY = 'jelgo-squeeze-v1', DAY = 24 * 3600 * 1000, HOLD = 5000, DRAIN = 2500;
+    var tick = 0, lastFocus = null, held = false, p = 0, raf = 0, last = 0, done = false;
+    function get(k, s) { try { return (s || localStorage).getItem(k); } catch (e) { return null; } }
+    function set(k, v, s) { try { (s || localStorage).setItem(k, v); } catch (e) {} }
+    function unlockedAt() { var t = Number(get(KEY)); return t > 0 ? t : 0; }
     function revealed() { return get(KEY + '-email') === '1'; }
-    function left() { var t = spunAt(); return t ? Math.max(0, t + DAY - Date.now()) : 0; }
+    function left() { var t = unlockedAt(); return t ? Math.max(0, t + DAY - Date.now()) : 0; }
     function fmt(ms) { var s = Math.floor(ms / 1000), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return [h, m, x].map(function (n) { return String(n).padStart(2, '0'); }).join(':'); }
     function render() {
       var ms = left(), txt = fmt(ms);
       if (timer) timer.textContent = txt;
-      if (pill) { pill.hidden = !(spunAt() && ms > 0 && wrap.hidden); if (pillTimer) pillTimer.textContent = revealed() ? txt : 'unlock'; }
+      if (pill) { pill.hidden = !(unlockedAt() && ms > 0 && wrap.hidden); if (pillTimer) pillTimer.textContent = revealed() ? txt : 'unlock'; }
     }
     function startTick() { if (!tick) { render(); tick = setInterval(render, 1000); } }
     function show(name) {
       Object.keys(steps).forEach(function (k) { steps[k].hidden = k !== name; });
-      wrap.classList.toggle('won', name !== 'play');
       if (name !== 'play') startTick();
-      var f = steps[name].querySelector(name === 'email' ? 'input[type=text]' : name === 'won' ? '[data-copy]' : '[data-sw-spin]');
+      var f = name === 'email' ? steps.email.querySelector('input[type=text]') : name === 'won' ? steps.won.querySelector('[data-copy]') : null;
       if (f) setTimeout(function () { f.focus(); }, 60);
     }
-    function open() {
-      lastFocus = document.activeElement; wrap.hidden = false; if (pill) pill.hidden = true;
-      if (spunAt()) { wheel.style.transition = 'none'; wheel.style.transform = 'rotate(-45deg)'; show(revealed() ? 'won' : 'email'); }
-      else show('play');
+    function paint() {
+      pouch.style.setProperty('--p', p.toFixed(3)); pouch.style.setProperty('--h', held ? '1' : '0');
+      wrap.style.setProperty('--p', p.toFixed(3));
+      secs.textContent = Math.max(0, (HOLD * (1 - p)) / 1000).toFixed(1) + ' s';
     }
-    function close() { wrap.hidden = true; set(KEY + '-closed', '1', sessionStorage); render(); if (lastFocus && lastFocus.focus) lastFocus.focus(); }
-    spinBtn.addEventListener('click', function () {
-      spinBtn.disabled = true; spinBtn.textContent = 'Spinning…';
-      // the 20% slice is centred at 45 degrees; bring it under the pointer after five full turns, with a little wobble
-      var end = 360 * 5 - 45 + (Math.random() * 40 - 20);
-      wheel.style.transform = 'rotate(' + end + 'deg)';
-      var fired = false, done = function () { if (fired) return; fired = true; set(KEY, String(Date.now())); show('email'); };
-      wheel.addEventListener('transitionend', done, { once: true });
-      setTimeout(done, 5200);
-    });
+    function loop(now) {
+      var dt = Math.min(64, now - (last || now)); last = now;
+      if (held) p = Math.min(1, p + dt / HOLD); else p = Math.max(0, p - dt / DRAIN);
+      paint();
+      if (held && !done) status.textContent = p < 0.5 ? 'Squeezing… keep holding' : p < 0.9 ? 'Almost empty!' : 'Last drop…';
+      if (p >= 1 && !done) return finish();
+      if (held || p > 0) raf = requestAnimationFrame(loop); else { raf = 0; last = 0; }
+    }
+    function press(e) {
+      if (done) return; if (e && e.preventDefault) e.preventDefault();
+      if (held) return; held = true; pouch.classList.add('held'); hint.textContent = 'Keep holding';
+      status.classList.remove('go');
+      if (navigator.vibrate) { try { navigator.vibrate(15); } catch (x) {} }
+      if (!raf) { last = 0; raf = requestAnimationFrame(loop); }
+    }
+    function release() {
+      if (!held) return; held = false; pouch.classList.remove('held');
+      if (!done) { hint.textContent = 'Press & hold'; if (p > 0.02) { status.textContent = 'Let go too early. Hold it for the full 5 seconds!'; status.classList.add('go'); } }
+      if (!raf) { last = 0; raf = requestAnimationFrame(loop); }
+    }
+    function finish() {
+      done = true; held = false; raf = 0; pouch.classList.remove('held'); pouch.classList.add('done');
+      hint.textContent = 'Empty!'; status.textContent = 'Pouch empty. You unlocked 20% off!'; wrap.classList.add('done');
+      set(KEY, String(Date.now()));
+      setTimeout(function () { show('email'); }, 700);
+    }
+    pouch.addEventListener('pointerdown', function (e) { if (pouch.setPointerCapture) { try { pouch.setPointerCapture(e.pointerId); } catch (x) {} } press(e); });
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (ev) { pouch.addEventListener(ev, release); });
+    pouch.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    pouch.addEventListener('keydown', function (e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); press(); } });
+    pouch.addEventListener('keyup', function (e) { if (e.key === ' ' || e.key === 'Enter') release(); });
+    document.addEventListener('keydown', function (e) { if (e.key === ' ' && !wrap.hidden && !steps.play.hidden && document.activeElement !== pouch && !/INPUT|TEXTAREA|BUTTON/.test(document.activeElement.tagName)) { e.preventDefault(); press(); } });
+    document.addEventListener('keyup', function (e) { if (e.key === ' ' && held && document.activeElement !== pouch) release(); });
     form.addEventListener('submit', function (e) {
       e.preventDefault(); err.textContent = '';
-      var name = form.querySelector('[name="contact[first_name]"]'), email = form.querySelector('[name="contact[email]"]'), ok = form.querySelector('[name="sw_consent"]');
+      var name = form.querySelector('[name="contact[first_name]"]'), email = form.querySelector('[name="contact[email]"]'), ok = form.querySelector('[name="sq_consent"]');
       if (!name.value.trim()) { err.textContent = 'Please enter your first name.'; name.focus(); return; }
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())) { err.textContent = 'Please enter a valid email.'; email.focus(); return; }
       if (!ok.checked) { err.textContent = 'Tick the box so we can email you.'; ok.focus(); return; }
       var btn = form.querySelector('button[type=submit]'); btn.disabled = true; btn.textContent = 'Unlocking…';
-      var finish = function () { set(KEY + '-email', '1'); show('won'); btn.disabled = false; btn.textContent = 'Reveal my code'; };
-      // saves them as a Shopify customer subscribed to email marketing (tags: newsletter, spin-wheel)
-      fetch(form.getAttribute('action'), { method: 'POST', body: new FormData(form), credentials: 'same-origin', headers: { 'Accept': 'text/html' } })
-        .then(finish, finish);
+      var fin = function () { set(KEY + '-email', '1'); show('won'); btn.disabled = false; btn.textContent = 'Reveal my code'; };
+      // saves them as a Shopify customer subscribed to email marketing (tags: newsletter, squeeze-unlock)
+      fetch(form.getAttribute('action'), { method: 'POST', body: new FormData(form), credentials: 'same-origin', headers: { 'Accept': 'text/html' } }).then(fin, fin);
     });
-    wrap.querySelectorAll('[data-sw-close]').forEach(function (b) { b.addEventListener('click', close); });
+    function open() {
+      lastFocus = document.activeElement; wrap.hidden = false; if (pill) pill.hidden = true;
+      if (unlockedAt()) { done = true; p = 1; paint(); pouch.classList.add('done'); hint.textContent = 'Empty!'; show(revealed() ? 'won' : 'email'); }
+      else { paint(); show('play'); }
+    }
+    function close() { release(); wrap.hidden = true; set(KEY + '-closed', '1', sessionStorage); render(); if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+    wrap.querySelectorAll('[data-sq-close]').forEach(function (x) { x.addEventListener('click', close); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !wrap.hidden) close(); });
     if (pill) pill.addEventListener('click', open);
-    if (spunAt()) { if (left() > 0) startTick(); render(); return; }
+    if (unlockedAt()) { if (left() > 0) startTick(); render(); return; }
     if (get(KEY + '-closed', sessionStorage)) return;
     setTimeout(function () { if (wrap.hidden) open(); }, 1500);
   })();
